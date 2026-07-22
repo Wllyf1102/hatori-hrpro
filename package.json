@@ -1,0 +1,55 @@
+{
+    "name": "hatori-dashboard",
+    "version": "1.0.0",
+    "description": "HATORI Group - Aplikasi Manajemen Karyawan & Izin",
+    "main": "main.js",
+    "author": "HATORI Group",
+    "license": "MIT",
+    "scripts": {
+        "start": "electron .",
+        "build": "electron-builder",
+        "build:win": "electron-builder --win",
+        "build:mac": "electron-builder --mac",
+        "build:linux": "electron-builder --linux",
+        "dev": "electron . --debug"
+    },
+    "build": {
+        "appId": "com.hatori.dashboard",
+        "productName": "HATORI Dashboard",
+        "directories": {
+            "output": "dist"
+        },
+        "files": [
+            "src/**/*",
+            "assets/**/*",
+            "main.js",
+            "package.json",
+            ".env"
+        ],
+        "win": {
+            "target": "nsis",
+            "icon": "assets/icons/icon.ico",
+            "artifactName": "HATORI-Dashboard-Setup.${ext}"
+        },
+        "mac": {
+            "target": "dmg",
+            "icon": "assets/icons/icon.icns",
+            "artifactName": "HATORI-Dashboard.${ext}"
+        },
+        "linux": {
+            "target": "AppImage",
+            "icon": "assets/icons/icon.png",
+            "artifactName": "HATORI-Dashboard.${ext}"
+        },
+        "nsis": {
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true
+        }
+    },
+    "devDependencies": {
+        "electron": "^28.0.0",
+        "electron-builder": "^24.0.0"
+    }
+}

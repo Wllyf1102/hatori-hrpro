@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HATORI Group · Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles-glass.css">
+  <style>
+    .nav-item.active-page {
+      background: rgba(59, 130, 246, 0.15);
+      color: #ffffff;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    .nav-item.active-page i {
+      color: #3b82f6;
+    }
+
+    /* Dashboard Card Styles - Grid 4 Kolom Rapi */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .dashboard-grid .stat-card {
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      min-height: 85px;
+    }
+
+    .dashboard-grid .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .dashboard-grid .stat-card .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .dashboard-grid .stat-card .stat-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .dashboard-grid .stat-card .stat-info .stat-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.45);
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dashboard-grid .stat-card .stat-info .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      display: block;
+      margin: 1px 0 2px;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+    }
+
+    .dashboard-grid .stat-card .stat-info .stat-link {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.3);
+      display: block;
+      transition: 0.3s ease;
+    }
+
+    .dashboard-grid .stat-card:hover .stat-link {
+      color: #3b82f6;
+    }
+
+    /* Disabled stat card - tetap terlihat tapi tidak bisa diklik */
+    .dashboard-grid .stat-card.disabled {
+      cursor: default;
+    }
+
+    .dashboard-grid .stat-card.disabled .stat-link {
+      color: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    .dashboard-grid .stat-card.disabled:hover {
+      transform: none !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    /* Warna Icon */
+    .stat-icon.blue { background: rgba(59, 130, 246, 0.3); }
+    .stat-icon.green { background: rgba(22, 163, 74, 0.3); }
+    .stat-icon.orange { background: rgba(234, 88, 12, 0.3); }
+    .stat-icon.red { background: rgba(220, 38, 38, 0.3); }
+    .stat-icon.purple { background: rgba(139, 92, 246, 0.3); }
+    .stat-icon.teal { background: rgba(20, 184, 166, 0.3); }
+    .stat-icon.pink { background: rgba(236, 72, 153, 0.3); }
+    .stat-icon.cyan { background: rgba(6, 182, 212, 0.3); }
+    .stat-icon.indigo { background: rgba(99, 102, 241, 0.3); }
+    .stat-icon.sky { background: rgba(56, 189, 248, 0.3); }
+
+    /* Access denied badge untuk link */
+    .access-denied-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      background: rgba(237, 5, 5, 0.12);
+      color: #e40303;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 500;
+      margin-left: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Two Column Layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- CHECK LOGIN STATUS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedUser = localStorage.getItem('hrpro_current_user');
+      if (!savedUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      try {
+        const user = JSON.parse(savedUser);
+        const users = JSON.parse(localStorage.getItem('hrpro_users')) || [];
+        const existing = users.find(u => u.email === user.email);
+        
+        if (existing && (existing.role === 'Superadmin' || existing.status === 'Active')) {
+          const nameEl = document.getElementById('userName');
+          const roleEl = document.getElementById('userRole');
+          if (nameEl) nameEl.textContent = existing.name || existing.email;
+          if (roleEl) roleEl.textContent = existing.role;
+          
+          const role = existing.role;
+          const navItems = document.querySelectorAll('.nav-item');
+          const allowedMenus = {
+            'Superadmin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'roles', 'pengaturan', 'api-telegram'],
+            'Admin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'api-telegram'],
+            'User': ['dashboard', 'karyawan', 'izin']
+          };
+          
+          const allowed = allowedMenus[role] || allowedMenus['User'];
+          
+          navItems.forEach(item => {
+            const page = item.dataset.page;
+            if (allowed.includes(page)) {
+              item.style.display = 'flex';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+          
+          return;
+        }
+        
+        localStorage.removeItem('hrpro_current_user');
+        window.location.href = 'login.html';
+        
+      } catch(e) {
+        localStorage.removeItem('hrpro_current_user');
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
+
+  <!-- BACKGROUND -->
+  <div class="bg-wrapper">
+    <div class="bg-blur"></div>
+  </div>
+
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar glass">
+      <div class="logo-area">
+        <img src="https://hijau.b-cdn.net/png-hatorigrup.png" alt="HATORI Group Logo" style="height: 40px; width: auto;">
+      </div>
+      <nav class="nav-menu">
+        <a href="dashboard.html" class="nav-item active-page" data-page="dashboard">
+          <i class="fas fa-chart-pie"></i> Dashboard
+        </a>
+        <a href="karyawan.html" class="nav-item" data-page="karyawan">
+          <i class="fas fa-users"></i> Karyawan
+        </a>
+        <a href="izin.html" class="nav-item" data-page="izin">
+          <i class="fas fa-file-alt"></i> Izin Staff
+        </a>
+        <a href="laporan.html" class="nav-item" data-page="laporan">
+          <i class="fas fa-chart-line"></i> Laporan Izin
+        </a>
+        <a href="users.html" class="nav-item" data-page="users">
+          <i class="fas fa-users-cog"></i> Users
+        </a>
+        <a href="roles.html" class="nav-item" data-page="roles">
+          <i class="fas fa-user-tag"></i> Roles
+        </a>
+        <a href="pengaturan.html" class="nav-item" data-page="pengaturan">
+          <i class="fas fa-cog"></i> Pengaturan
+        </a>
+        <a href="api-telegram.html" class="nav-item" data-page="api-telegram">
+          <i class="fab fa-telegram-plane"></i> Api Telegram
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <img src="https://ui-avatars.com/api/?name=Super+Admin&background=2A3B4C&color=fff&size=40" alt="avatar">
+          <div>
+            <span class="name" id="userName">Super Admin</span>
+            <span class="role" id="userRole">Superadmin</span>
+          </div>
+        </div>
+        <button type="button" id="logoutBtn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="topbar glass">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Cari karyawan atau absensi..." />
+        </div>
+        <div class="topbar-actions">
+          <span class="date-badge"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></span>
+          <button class="icon-btn" id="notifBtn"><i class="far fa-bell"></i><span class="notif-dot"></span></button>
+          <button class="icon-btn"><i class="far fa-envelope"></i></button>
+        </div>
+      </header>
+
+      <!-- ROW 1: 4 CARD -->
+      <div class="dashboard-grid">
+        <div class="stat-card glass" data-page="karyawan" data-situs="" data-posisi="" id="cardTotalKaryawan">
+          <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Karyawan Keseluruhan</span>
+            <span class="stat-value" id="totalKaryawan">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="Inatogel" data-posisi="" id="cardInatogel">
+          <div class="stat-icon orange"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Inatogel</span>
+            <span class="stat-value" id="totalInatogel">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="Kepritogel" data-posisi="" id="cardKepritogel">
+          <div class="stat-icon red"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Kepritogel</span>
+            <span class="stat-value" id="totalKepritogel">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="Hatoribet" data-posisi="" id="cardHatoribet">
+          <div class="stat-icon purple"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Hatoribet</span>
+            <span class="stat-value" id="totalHatoribet">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: 4 CARD -->
+      <div class="dashboard-grid" style="margin-bottom: 24px;">
+        <div class="stat-card glass" data-page="karyawan" data-situs="Livitoto" data-posisi="" id="cardLivitoto">
+          <div class="stat-icon teal"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Livitoto</span>
+            <span class="stat-value" id="totalLivitoto">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="Hmd29" data-posisi="" id="cardHmd29">
+          <div class="stat-icon pink"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Hmd29</span>
+            <span class="stat-value" id="totalHmd29">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="" data-posisi="LiveChat" id="cardLiveChat">
+          <div class="stat-icon cyan"><i class="fas fa-comments"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff LiveChat</span>
+            <span class="stat-value" id="totalLiveChat">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="" data-posisi="Seo" id="cardSeo">
+          <div class="stat-icon indigo"><i class="fas fa-chart-line"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Seo</span>
+            <span class="stat-value" id="totalSeo">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TWO COLUMN LAYOUT ===== -->
+      <div class="two-col">
+        <!-- Left: History Izin -->
+        <section class="card glass table-card">
+          <div class="card-header">
+            <h3><i class="fas fa-clock" style="color: #facc15;"></i> History Izin Staff Hari Ini</h3>
+            <a href="izin.html" class="link-more">Lihat semua <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Divisi</th>
+                  <th>Status</th>
+                  <th>Jam Izin</th>
+                  <th>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody id="historyIzinTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Right: Data Karyawan -->
+        <section class="card glass chart-card">
+          <div class="card-header">
+            <h3><i class="fas fa-users" style="color: #3b82f6;"></i> Data Karyawan</h3>
+            <a href="karyawan.html" class="link-more" id="linkKelolaKaryawan">Kelola <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="table-responsive" style="max-height: 320px; overflow-y: auto; scroll-behavior: smooth;">
+            <table>
+              <thead style="position: sticky; top: 0; z-index: 10; background: rgba(15,15,26,0.95);">
+                <tr>
+                  <th>Nama</th>
+                  <th>Inisial</th>
+                  <th>Situs</th>
+                  <th>Posisi</th>
+                  <th>Tanggal Join</th>
+                </tr>
+              </thead>
+              <tbody id="dataKaryawanTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========== MODAL-MODAL ========== -->
+  <!-- Modal Tambah Karyawan -->
+  <div class="modal-overlay" id="modalTambahKaryawan">
+    <div class="modal-content glass">
+      <div class="modal-header">
+        <h3><i class="fas fa-user-plus" style="color: #3b82f6;"></i> Tambah Karyawan Baru</h3>
+        <button class="modal-close" id="closeModal">&times;</button>
+      </div>
+      <form id="formTambahKaryawan">
+        <div class="form-group">
+          <label>Foto Profil</label>
+          <div class="photo-upload">
+            <img id="photoPreview" src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff&size=80" alt="Preview">
+            <div>
+              <input type="file" id="photoInput" accept="image/*" style="display: none;">
+              <button type="button" class="btn-upload-photo" id="btnUploadPhoto">
+                <i class="fas fa-camera"></i> Upload Foto
+              </button>
+              <small style="display: block; color: rgba(255,255,255,0.4); margin-top: 4px;">Format: JPG, PNG (Max 2MB)</small>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ID Karyawan <span class="required">*</span></label>
+            <input type="text" id="inputID" placeholder="Contoh: EMP001" required>
+          </div>
+          <div class="form-group">
+            <label>Inisial <span class="required">*</span></label>
+            <input type="text" id="inputInisial" placeholder="Contoh: BS" maxlength="3" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nama Lengkap <span class="required">*</span></label>
+          <input type="text" id="inputNama" placeholder="Masukkan nama lengkap" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Situs <span class="required">*</span></label>
+            <select id="inputDivisi" required>
+              <option value="">Pilih Situs</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Posisi <span class="required">*</span></label>
+            <input type="text" id="inputPosisi" placeholder="Contoh: Senior Developer" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nomor Telepon <span class="required">*</span></label>
+          <input type="tel" id="inputTelepon" placeholder="08xx-xxxx-xxxx" pattern="[0-9+\-() ]+" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tanggal Join <span class="required">*</span></label>
+            <input type="date" id="inputTanggalJoin" required>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="inputStatus">
+              <option value="Aktif">Aktif</option>
+              <option value="Cuti">Cuti</option>
+              <option value="Resign">Resign</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="btnCancelModal">Batal</button>
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-save"></i> Simpan Karyawan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Preview Foto -->
+  <div class="modal-overlay" id="modalPreviewFoto">
+    <div class="modal-content glass" style="max-width: 400px; text-align: center;">
+      <div class="modal-header">
+        <h3><i class="fas fa-image" style="color: #3b82f6;"></i> Foto Profil</h3>
+        <button class="modal-close" id="closePreviewModal">&times;</button>
+      </div>
+      <img id="previewFotoLarge" src="" alt="Foto Profil" style="width: 100%; max-width: 300px; border-radius: 16px; margin: 20px 0; border: 3px solid rgba(255,255,255,0.1);">
+      <p id="previewNamaKaryawan" style="font-weight: 600; font-size: 18px; color: white;"></p>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn-cancel" id="closePreviewBtn">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Pilih Karyawan Izin -->
+  <div class="modal-overlay" id="modalPilihKaryawanIzin">
+    <div class="modal-content glass" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 id="modalIzinTitle"><i class="fas fa-file-alt" style="color: #3b82f6;"></i> Pilih Karyawan - Izin Keluar</h3>
+        <button class="modal-close" id="closePilihIzinModal">&times;</button>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <input type="text" id="searchKaryawanIzin" placeholder="Cari nama karyawan..." style="width: 100%; padding: 10px 14px; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif; background: rgba(255,255,255,0.03); color: white;">
+      </div>
+      <div id="daftarKaryawanIzin" style="max-height: 350px; overflow-y: auto;"></div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn-cancel" id="closePilihIzinBtn">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Submit Izin -->
+  <div class="modal-overlay" id="modalSubmitIzin">
+    <div class="modal-content glass" style="max-width: 450px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-pen" style="color: #3b82f6;"></i> Form Izin Keluar</h3>
+        <button class="modal-close" id="closeSubmitIzinModal">&times;</button>
+      </div>
+      <form id="formSubmitIzin">
+        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+          <p style="margin-bottom: 4px; color: white;"><strong>Nama:</strong> <span id="izinNamaKaryawan"></span></p>
+          <p style="margin-bottom: 4px; color: white;"><strong>Inisial:</strong> <span id="izinInisialKaryawan"></span></p>
+          <p style="color: white;"><strong>Jam Izin:</strong> <span id="izinJamKeluar"></span></p>
+        </div>
+        <div class="form-group">
+          <label>Keterangan Izin <span class="required">*</span></label>
+          <select id="inputKeteranganIzin" required>
+            <option value="">Pilih Keterangan</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelSubmitIzin">Batal</button>
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i> Submit Izin
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Riwayat Izin -->
+  <div class="modal-overlay" id="modalRiwayatIzin">
+    <div class="modal-content glass" style="max-width: 700px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-history" style="color: #3b82f6;"></i> Riwayat Izin: <span id="riwayatNamaStaff"></span></h3>
+        <button class="modal-close" id="closeRiwayatModal">&times;</button>
+      </div>
+      <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+        <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 120px;">
+          <label style="color: rgba(255,255,255,0.7); font-size: 12px;">Mulai</label>
+          <input type="date" id="riwayatTglMulai" style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 7px 12px; width: 100%;">
+        </div>
+        <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 120px;">
+          <label style="color: rgba(255,255,255,0.7); font-size: 12px;">Akhir</label>
+          <input type="date" id="riwayatTglAkhir" style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 7px 12px; width: 100%;">
+        </div>
+        <button class="btn-add" id="btnRiwayatFilter" style="margin-top: 18px; padding: 7px 16px; font-size: 12px;">
+          <i class="fas fa-search"></i> Submit
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Jam Izin</th>
+              <th>Jam Kembali</th>
+              <th>Durasi</th>
+              <th>Keterangan</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="riwayatTableBody"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn-cancel" id="closeRiwayatBtn">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Date Picker -->
+  <div class="modal-overlay" id="modalDatePicker">
+    <div class="modal-content glass" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-calendar-alt" style="color: #3b82f6;"></i> Pilih Periode</h3>
+        <button class="modal-close" id="closeDatePicker">&times;</button>
+      </div>
+      
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+        <button class="btn-quick" data-period="thisWeek" style="background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); border-radius: 8px; padding: 6px 14px; cursor: pointer; font-size: 12px; font-family: 'Inter', sans-serif;">This Week</button>
+        <button class="btn-quick" data-period="thisMonth" style="background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); border-radius: 8px; padding: 6px 14px; cursor: pointer; font-size: 12px; font-family: 'Inter', sans-serif;">This Month</button>
+        <button class="btn-quick" data-period="lastWeek" style="background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); border-radius: 8px; padding: 6px 14px; cursor: pointer; font-size: 12px; font-family: 'Inter', sans-serif;">Last Week</button>
+        <button class="btn-quick" data-period="lastMonth" style="background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); border-radius: 8px; padding: 6px 14px; cursor: pointer; font-size: 12px; font-family: 'Inter', sans-serif;">Last Month</button>
+      </div>
+      
+      <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+          <label style="color: rgba(255,255,255,0.6); font-size: 12px;">Start Date</label>
+          <input type="date" id="pickerStartDate" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: rgba(255,255,255,0.05); color: white; font-family: 'Inter', sans-serif;">
+        </div>
+        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+          <label style="color: rgba(255,255,255,0.6); font-size: 12px;">End Date</label>
+          <input type="date" id="pickerEndDate" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: rgba(255,255,255,0.05); color: white; font-family: 'Inter', sans-serif;">
+        </div>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <button id="prevMonth" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: rgba(255,255,255,0.6); cursor: pointer; padding: 6px 16px; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.3s;">
+          ‹ Prev
+        </button>
+        <span id="calendarRangeLabel" style="color: rgba(255,255,255,0.5); font-size: 13px;">Juni 2026 - Juli 2026</span>
+        <button id="nextMonth" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: rgba(255,255,255,0.6); cursor: pointer; padding: 6px 16px; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.3s;">
+          Next ›
+        </button>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 16px;">
+        <div>
+          <div style="text-align: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 6px;">
+            <span id="calendarMonthPrev"></span>
+          </div>
+          <table class="calendar-table" style="width: 100%; border-collapse: collapse; text-align: center; font-size: 12px;">
+            <thead>
+              <tr>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Su</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Mo</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Tu</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">We</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Th</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Fr</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Sa</th>
+              </tr>
+            </thead>
+            <tbody id="calendarBodyPrev"></tbody>
+          </table>
+        </div>
+        
+        <div>
+          <div style="text-align: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 6px;">
+            <span id="calendarMonthCurrent"></span>
+          </div>
+          <table class="calendar-table" style="width: 100%; border-collapse: collapse; text-align: center; font-size: 12px;">
+            <thead>
+              <tr>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Su</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Mo</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Tu</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">We</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Th</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Fr</th>
+                <th style="color: rgba(255,255,255,0.4); padding: 4px; font-weight: 400;">Sa</th>
+              </tr>
+            </thead>
+            <tbody id="calendarBodyCurrent"></tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="modal-footer" style="justify-content: space-between;">
+        <div>
+          <span style="color: rgba(255,255,255,0.4); font-size: 12px;">Selected: <span id="selectedRangeDisplay">-</span></span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-cancel" id="cancelDatePicker">Batal</button>
+          <button class="btn-submit" id="applyDatePicker">
+            <i class="fas fa-check"></i> Apply
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Role -->
+  <div class="modal-overlay" id="modalRole">
+    <div class="modal-content glass" style="max-width: 550px;">
+      <div class="modal-header">
+        <h3 id="modalRoleTitle"><i class="fas fa-user-tag" style="color: #3b82f6;"></i> Tambah Role</h3>
+        <button class="modal-close" id="closeRoleModal">&times;</button>
+      </div>
+      <form id="formRole">
+        <input type="hidden" id="editRoleId" value="">
+        
+        <div class="form-group">
+          <label>Role Name <span class="required">*</span></label>
+          <input type="text" id="inputRoleName" placeholder="Contoh: Manager" required>
+        </div>
+        
+        <div class="form-group">
+          <label>Menu Yang Diizinkan <span class="required">*</span></label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="dashboard"> Dashboard
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="karyawan"> Karyawan
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="izin"> Izin Staff
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="laporan"> Laporan Izin
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="users"> Users
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="pengaturan"> Pengaturan
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="api-telegram"> Api Telegram
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="roles"> Roles
+            </label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Permissions <span class="required">*</span></label>
+          <div style="display: flex; gap: 16px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="permission-checkbox" value="create"> Create
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="permission-checkbox" value="edit"> Edit
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="permission-checkbox" value="delete"> Hapus
+            </label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Status <span class="required">*</span></label>
+          <select id="inputRoleStatus" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelRoleBtn">Batal</button>
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-save"></i> <span id="roleSubmitText">Simpan Role</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- LOGOUT SCRIPT -->
+  <script>
+    function doLogout() {
+      if (confirm('Apakah Anda yakin ingin logout?')) {
+        localStorage.removeItem('hrpro_current_user');
+        localStorage.removeItem('hrpro_last_page');
+        localStorage.removeItem('hrpro_filter_situs');
+        localStorage.removeItem('hrpro_filter_posisi');
+        window.location.href = 'login.html';
+        return false;
+      }
+      return false;
+    }
+    
+    (function() {
+      const btn = document.getElementById('logoutBtn');
+      if (btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          doLogout();
+          return false;
+        });
+      }
+    })();
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../js/db.js"></script>
+<script src="../js/dashboard.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Update current date
+      const now = new Date();
+      const options = { day: 'numeric', month: 'short', year: 'numeric' };
+      const dateEl = document.getElementById('currentDate');
+      if (dateEl) dateEl.textContent = now.toLocaleDateString('id-ID', options);
+      
+      // ===== PASTIKAN DATA TELAH DIMUAT =====
+      console.log('🔍 Dashboard - Memuat data...');
+      
+      // Coba load data dari localStorage
+      try {
+        const savedKaryawan = localStorage.getItem('hrpro_karyawan_data');
+        if (savedKaryawan) {
+          const parsed = JSON.parse(savedKaryawan);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            if (typeof karyawanData !== 'undefined') {
+              karyawanData = parsed;
+              console.log('✅ Karyawan data loaded:', karyawanData.length, 'items');
+            }
+          }
+        }
+      } catch(e) {
+        console.error('Error loading karyawan data:', e);
+      }
+      
+      try {
+        const savedIzin = localStorage.getItem('hrpro_izin_data');
+        if (savedIzin) {
+          const parsed = JSON.parse(savedIzin);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            if (typeof izinData !== 'undefined') {
+              izinData = parsed;
+              console.log('✅ Izin data loaded:', izinData.length, 'items');
+            }
+          }
+        }
+      } catch(e) {
+        console.error('Error loading izin data:', e);
+      }
+      
+      // ===== CEK AKSES KARYAWAN =====
+      const hasAccessKaryawan = canViewMenu('karyawan');
+      console.log('🔑 Has access to Karyawan:', hasAccessKaryawan);
+      
+      // ===== ATUR LINK KELOLA KARYAWAN =====
+      const linkKelola = document.getElementById('linkKelolaKaryawan');
+      if (linkKelola) {
+        if (!hasAccessKaryawan) {
+          // Sembunyikan link "Kelola"
+          linkKelola.style.display = 'none';
+          // Tambahkan indikator akses ditolak
+          const header = linkKelola.closest('.card-header');
+          if (header) {
+            const indicator = document.createElement('span');
+            indicator.className = 'access-denied-badge';
+            indicator.textContent = '🔒 Akses ditolak';
+            header.appendChild(indicator);
+          }
+          console.log('❌ Link "Kelola Karyawan" disembunyikan untuk role User');
+        }
+      }
+      
+      // ===== ATUR STAT CARD - TETAP DITAMPILKAN TAPI TIDAK BISA DIKLIK =====
+      // Perbaikan: Kita tidak perlu menambahkan class disabled di sini
+      // karena akan ditangani oleh setupStatCardEvents
+      
+      // ===== RENDER DATA =====
+      console.log('📊 Rendering dashboard data...');
+      
+      // Render History Izin Hari Ini
+      if (typeof renderHistoryIzinHariIni === 'function') {
+        renderHistoryIzinHariIni();
+      }
+      
+      // Render Data Karyawan
+      if (typeof renderDataKaryawan === 'function') {
+        renderDataKaryawan();
+      }
+      
+      // Render statistik
+      if (typeof updateTotalKaryawan === 'function') {
+        updateTotalKaryawan();
+      }
+      
+      if (typeof updateDashboardStats === 'function') {
+        updateDashboardStats();
+      }
+      
+      // Setup stat card events - tunggu sampai semua data siap
+      setTimeout(function() {
+        if (typeof setupStatCardEvents === 'function') {
+          setupStatCardEvents();
+        }
+      }, 300);
+    });
+  </script>
+</body>
+</html>

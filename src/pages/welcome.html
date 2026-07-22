@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selamat Datang · HATORI Group</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background: #0a0a15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ===== BACKGROUND DENGAN GAMBAR ===== */
+    .bg-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background: 
+        url('https://hijau.b-cdn.net/213q13rt43.png') center center / cover no-repeat,
+        #0a0a15;
+    }
+
+    .bg-blur {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(1px);
+      -webkit-backdrop-filter: blur(2px);
+      z-index: 0;
+      background: rgba(10, 10, 21, 0.5);
+    }
+
+    /* ===== FLOATING ORBS ===== */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      z-index: 0;
+      animation: orbFloat 25s ease-in-out infinite alternate;
+    }
+
+    .orb:nth-child(1) {
+      width: 500px;
+      height: 500px;
+      background: rgba(59, 130, 246, 0.25);
+      top: -150px;
+      left: -150px;
+      animation-delay: 0s;
+    }
+
+    .orb:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      background: rgba(139, 92, 246, 0.2);
+      bottom: -100px;
+      right: -100px;
+      animation-delay: -7s;
+    }
+
+    .orb:nth-child(3) {
+      width: 300px;
+      height: 300px;
+      background: rgba(236, 72, 153, 0.15);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -14s;
+    }
+
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(40px, -40px) scale(1.1); }
+      66% { transform: translate(-30px, 30px) scale(0.9); }
+      100% { transform: translate(20px, -20px) scale(1.05); }
+    }
+
+    /* ===== SNOWFALL ===== */
+    .snowflakes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .snowflake {
+      position: absolute;
+      top: -20px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      animation: snowfall linear infinite;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .snowflake:nth-child(1) { left: 5%; animation-duration: 12s; animation-delay: 0s; font-size: 12px; opacity: 0.7; }
+    .snowflake:nth-child(2) { left: 15%; animation-duration: 15s; animation-delay: 2s; font-size: 18px; opacity: 0.5; }
+    .snowflake:nth-child(3) { left: 25%; animation-duration: 10s; animation-delay: 4s; font-size: 10px; opacity: 0.8; }
+    .snowflake:nth-child(4) { left: 35%; animation-duration: 18s; animation-delay: 1s; font-size: 22px; opacity: 0.4; }
+    .snowflake:nth-child(5) { left: 45%; animation-duration: 13s; animation-delay: 3s; font-size: 14px; opacity: 0.6; }
+    .snowflake:nth-child(6) { left: 55%; animation-duration: 16s; animation-delay: 5s; font-size: 16px; opacity: 0.5; }
+    .snowflake:nth-child(7) { left: 65%; animation-duration: 11s; animation-delay: 2s; font-size: 11px; opacity: 0.7; }
+    .snowflake:nth-child(8) { left: 75%; animation-duration: 14s; animation-delay: 4s; font-size: 20px; opacity: 0.4; }
+    .snowflake:nth-child(9) { left: 85%; animation-duration: 17s; animation-delay: 1s; font-size: 13px; opacity: 0.6; }
+    .snowflake:nth-child(10) { left: 95%; animation-duration: 12s; animation-delay: 3s; font-size: 15px; opacity: 0.5; }
+    .snowflake:nth-child(11) { left: 10%; animation-duration: 19s; animation-delay: 6s; font-size: 8px; opacity: 0.9; }
+    .snowflake:nth-child(12) { left: 50%; animation-duration: 14s; animation-delay: 7s; font-size: 24px; opacity: 0.3; }
+    .snowflake:nth-child(13) { left: 30%; animation-duration: 16s; animation-delay: 2s; font-size: 9px; opacity: 0.8; }
+    .snowflake:nth-child(14) { left: 70%; animation-duration: 13s; animation-delay: 5s; font-size: 17px; opacity: 0.5; }
+    .snowflake:nth-child(15) { left: 90%; animation-duration: 15s; animation-delay: 3s; font-size: 12px; opacity: 0.7; }
+
+    @keyframes snowfall {
+      0% { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(calc(100vh + 20px)) rotate(720deg) translateX(50px); opacity: 0; }
+    }
+
+    /* ===== SPARKLE PARTICLES ===== */
+    .sparkles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .sparkle-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(59, 130, 246, 0.4);
+      animation: sparkleFloat linear infinite;
+    }
+
+    .sparkle-particle:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; width: 3px; height: 3px; }
+    .sparkle-particle:nth-child(2) { left: 20%; animation-duration: 12s; animation-delay: 2s; width: 5px; height: 5px; }
+    .sparkle-particle:nth-child(3) { left: 30%; animation-duration: 10s; animation-delay: 4s; width: 2px; height: 2px; }
+    .sparkle-particle:nth-child(4) { left: 40%; animation-duration: 14s; animation-delay: 1s; width: 4px; height: 4px; }
+    .sparkle-particle:nth-child(5) { left: 50%; animation-duration: 9s; animation-delay: 3s; width: 3px; height: 3px; }
+    .sparkle-particle:nth-child(6) { left: 60%; animation-duration: 11s; animation-delay: 5s; width: 6px; height: 6px; }
+    .sparkle-particle:nth-child(7) { left: 70%; animation-duration: 13s; animation-delay: 2s; width: 2px; height: 2px; }
+    .sparkle-particle:nth-child(8) { left: 80%; animation-duration: 10s; animation-delay: 4s; width: 4px; height: 4px; }
+    .sparkle-particle:nth-child(9) { left: 90%; animation-duration: 15s; animation-delay: 1s; width: 3px; height: 3px; }
+    .sparkle-particle:nth-child(10) { left: 5%; animation-duration: 12s; animation-delay: 6s; width: 5px; height: 5px; }
+    .sparkle-particle:nth-child(11) { left: 45%; animation-duration: 10s; animation-delay: 3s; width: 3px; height: 3px; }
+    .sparkle-particle:nth-child(12) { left: 85%; animation-duration: 14s; animation-delay: 5s; width: 4px; height: 4px; }
+
+    @keyframes sparkleFloat {
+      0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(-20vh) scale(1) rotate(360deg); opacity: 0; }
+    }
+
+    /* ===== MAIN CONTAINER ===== */
+    .welcome-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 580px;
+      padding: 20px;
+      perspective: 1200px;
+    }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 32px;
+      padding: 48px 40px 40px;
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        0 0 60px rgba(59, 130, 246, 0.05);
+      transform-style: preserve-3d;
+      animation: cardEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      transform: rotateX(5deg) rotateY(-3deg) translateZ(0);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.03), transparent 60%);
+      animation: shimmerBg 10s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmerBg {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.2); }
+    }
+
+    /* Glow border effect */
+    .welcome-card::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 32px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.3));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      animation: borderGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes borderGlow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .welcome-card:hover {
+      transform: rotateX(2deg) rotateY(-1deg) translateZ(20px);
+      box-shadow: 
+        0 40px 100px rgba(0, 0, 0, 0.7),
+        0 0 80px rgba(59, 130, 246, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    @keyframes cardEntrance {
+      0% {
+        opacity: 0;
+        transform: rotateX(20deg) rotateY(15deg) translateZ(-100px) scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: rotateX(5deg) rotateY(-3deg) translateZ(0) scale(1);
+      }
+    }
+
+    /* ===== LOGO AREA ===== */
+    .logo-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-area img {
+      display: block !important;
+      height: 55px;
+      width: auto;
+      max-width: 200px;
+      object-fit: contain;
+      margin: 0 auto;
+      filter: drop-shadow(0 4px 30px rgba(59, 130, 246, 0.2));
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { filter: drop-shadow(0 4px 30px rgba(59, 130, 246, 0.2)); }
+      50% { filter: drop-shadow(0 4px 50px rgba(59, 130, 246, 0.4)); }
+    }
+
+    /* ===== DECORATIVE LINE ===== */
+    .deco-line {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      transform-style: preserve-3d;
+      transform: translateZ(5px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .deco-line span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      animation: decoPulse 2.5s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.05);
+    }
+
+    .deco-line span:nth-child(1) { animation-delay: 0s; background: rgba(59, 130, 246, 0.4); box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); }
+    .deco-line span:nth-child(2) { animation-delay: 0.3s; background: rgba(139, 92, 246, 0.4); box-shadow: 0 0 30px rgba(139, 92, 246, 0.15); }
+    .deco-line span:nth-child(3) { animation-delay: 0.6s; background: rgba(236, 72, 153, 0.3); box-shadow: 0 0 30px rgba(236, 72, 153, 0.1); }
+    .deco-line span:nth-child(4) { animation-delay: 0.9s; background: rgba(59, 130, 246, 0.4); box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); }
+    .deco-line span:nth-child(5) { animation-delay: 1.2s; background: rgba(139, 92, 246, 0.4); box-shadow: 0 0 30px rgba(139, 92, 246, 0.15); }
+
+    @keyframes decoPulse {
+      0%, 100% { transform: scale(1) translateY(0); opacity: 0.4; }
+      50% { transform: scale(1.8) translateY(-8px); opacity: 1; }
+    }
+
+    /* ===== WELCOME TEXT ===== */
+    .welcome-text {
+      text-align: center;
+      margin-bottom: 8px;
+      transform-style: preserve-3d;
+      position: relative;
+      z-index: 1;
+    }
+
+    .welcome-text .greeting {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.3);
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      animation: textGlow 3s ease-in-out infinite;
+      position: relative;
+      display: inline-block;
+    }
+
+    .welcome-text .greeting::before,
+    .welcome-text .greeting::after {
+      content: '✦';
+      color: rgba(59, 130, 246, 0.3);
+      margin: 0 10px;
+    }
+
+    @keyframes textGlow {
+      0%, 100% { opacity: 0.3; text-shadow: 0 0 20px rgba(59, 130, 246, 0); }
+      50% { opacity: 0.8; text-shadow: 0 0 30px rgba(59, 130, 246, 0.2); }
+    }
+
+    .welcome-text .name-display {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 20%, #93c5fd 50%, #a78bfa 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transform: translateZ(20px);
+      display: inline-block;
+      word-break: break-all;
+      animation: nameGlow 4s ease-in-out infinite;
+      position: relative;
+    }
+
+    .welcome-text .name-display::after {
+      content: ' 👋';
+      -webkit-text-fill-color: initial;
+      color: #facc15;
+      animation: wave 2s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(15deg); }
+      75% { transform: rotate(-10deg); }
+    }
+
+    @keyframes nameGlow {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.1)); }
+      50% { filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.2)); }
+    }
+
+    .welcome-text .email-display {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 8px;
+      transform: translateZ(10px);
+      letter-spacing: 0.5px;
+      word-break: break-all;
+      position: relative;
+      z-index: 1;
+    }
+
+    .welcome-text .email-display i {
+      margin-right: 8px;
+      color: #3b82f6;
+      font-size: 14px;
+      animation: emailIconPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes emailIconPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* ===== USER AVATAR ===== */
+    .user-avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 6px;
+      transform: translateZ(15px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .user-avatar .avatar-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid rgba(59, 130, 246, 0.3);
+      object-fit: cover;
+      box-shadow: 0 4px 30px rgba(59, 130, 246, 0.15);
+      transition: all 0.5s ease;
+      animation: avatarPulse 3s ease-in-out infinite;
+    }
+
+    .user-avatar .avatar-img:hover {
+      transform: scale(1.1);
+      border-color: rgba(59, 130, 246, 0.6);
+      box-shadow: 0 4px 50px rgba(59, 130, 246, 0.3);
+    }
+
+    @keyframes avatarPulse {
+      0%, 100% { box-shadow: 0 4px 30px rgba(59, 130, 246, 0.15); }
+      50% { box-shadow: 0 4px 50px rgba(59, 130, 246, 0.3); }
+    }
+
+    /* ===== MESSAGE BOX ===== */
+    .message-box {
+      margin: 24px 0 32px;
+      padding: 24px 28px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transform-style: preserve-3d;
+      transform: translateZ(10px);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s ease;
+      z-index: 1;
+    }
+
+    .message-box:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(59, 130, 246, 0.15);
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.05);
+    }
+
+    .message-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.05), transparent 50%);
+      animation: shimmerMsg 8s ease-in-out infinite;
+    }
+
+    @keyframes shimmerMsg {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.2); }
+    }
+
+    .message-box .quote-icon {
+      position: absolute;
+      top: 12px;
+      right: 20px;
+      font-size: 48px;
+      color: rgba(59, 130, 246, 0.06);
+      transform: rotate(180deg);
+    }
+
+    .message-box p {
+      position: relative;
+      z-index: 1;
+      font-size: 17px;
+      line-height: 1.9;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 400;
+      text-align: center;
+      letter-spacing: 0.2px;
+    }
+
+    .message-box p .highlight {
+      color: #60a5fa;
+      font-weight: 600;
+      text-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+    }
+
+    .message-box p .highlight-2 {
+      color: #facc15;
+      font-weight: 600;
+      text-shadow: 0 0 30px rgba(234, 179, 8, 0.15);
+    }
+
+    .message-box p .highlight-3 {
+      color: #a78bfa;
+      font-weight: 600;
+      text-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
+    }
+
+    /* ===== ENTER BUTTON ===== */
+    .btn-enter {
+      width: 100%;
+      padding: 18px 32px;
+      border: none;
+      border-radius: 18px;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      transform-style: preserve-3d;
+      transform: translateZ(15px);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #ffffff;
+      box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+      z-index: 1;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-enter::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .btn-enter:hover::before {
+      left: 100%;
+    }
+
+    .btn-enter:hover {
+      transform: translateZ(30px) scale(1.03);
+      box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4);
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+    }
+
+    .btn-enter:active {
+      transform: translateZ(5px) scale(0.97);
+    }
+
+    .btn-enter i {
+      font-size: 20px;
+      transition: transform 0.4s ease;
+    }
+
+    .btn-enter:hover i {
+      transform: translateX(6px) rotate(-10deg);
+    }
+
+    .btn-enter .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ffffff;
+      border-radius: 50%;
+      animation: sparkle 1.5s ease-in-out infinite;
+    }
+
+    .btn-enter .sparkle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+    .btn-enter .sparkle:nth-child(2) { top: 60%; right: 15%; animation-delay: 0.5s; }
+    .btn-enter .sparkle:nth-child(3) { bottom: 25%; left: 30%; animation-delay: 1s; }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+
+    /* ===== LOADING OVERLAY ===== */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 10, 21, 0.9);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .loading-spinner {
+      width: 70px;
+      height: 70px;
+      border: 3px solid rgba(255, 255, 255, 0.05);
+      border-top: 3px solid #3b82f6;
+      border-right: 3px solid #6366f1;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      box-shadow: 0 0 60px rgba(59, 130, 246, 0.1);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 480px) {
+      .welcome-card {
+        padding: 32px 20px 28px;
+        border-radius: 24px;
+      }
+
+      .logo-area img {
+        height: 40px;
+      }
+
+      .welcome-text .name-display {
+        font-size: 22px;
+      }
+
+      .welcome-text .email-display {
+        font-size: 13px;
+      }
+
+      .message-box p {
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .message-box {
+        padding: 18px 16px;
+      }
+
+      .btn-enter {
+        font-size: 16px;
+        padding: 14px 24px;
+        border-radius: 14px;
+      }
+
+      .user-avatar .avatar-img {
+        width: 48px;
+        height: 48px;
+      }
+
+      .welcome-text .greeting {
+        font-size: 11px;
+        letter-spacing: 2px;
+      }
+
+      .welcome-text .greeting::before,
+      .welcome-text .greeting::after {
+        margin: 0 6px;
+      }
+
+      .deco-line span {
+        width: 8px;
+        height: 8px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .welcome-card {
+        padding: 24px 16px 20px;
+        border-radius: 20px;
+      }
+
+      .logo-area img {
+        height: 34px;
+      }
+
+      .welcome-text .name-display {
+        font-size: 18px;
+      }
+
+      .welcome-text .email-display {
+        font-size: 12px;
+      }
+
+      .message-box p {
+        font-size: 13px;
+      }
+
+      .btn-enter {
+        font-size: 14px;
+        padding: 12px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== BACKGROUND DENGAN GAMBAR ===== -->
+  <div class="bg-wrapper"></div>
+  <div class="bg-blur"></div>
+
+  <!-- ===== FLOATING ORBS ===== -->
+  <div class="orb"></div>
+  <div class="orb"></div>
+  <div class="orb"></div>
+
+  <!-- ===== SNOWFALL ===== -->
+  <div class="snowflakes">
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+  </div>
+
+  <!-- ===== SPARKLE PARTICLES ===== -->
+  <div class="sparkles">
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+    <div class="sparkle-particle"></div>
+  </div>
+
+  <!-- ===== LOADING OVERLAY ===== -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="welcome-container">
+    <div class="welcome-card" id="welcomeCard">
+
+      <!-- Logo -->
+      <div class="logo-area">
+        <img src="https://hijau.b-cdn.net/png-hatorigrup.png" alt="Hatori Group">
+      </div>
+
+      <!-- Decorative Line -->
+      <div class="deco-line">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <!-- Welcome Text -->
+      <div class="welcome-text">
+        <div class="greeting">Selamat Datang</div>
+        <div class="name-display" id="userNameDisplay">User</div>
+        <div class="email-display" id="userEmailDisplay">
+          <i class="fas fa-envelope"></i> <span id="userEmailText">user@example.com</span>
+        </div>
+      </div>
+
+      <!-- User Avatar -->
+      <div class="user-avatar">
+        <img class="avatar-img" id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff&size=56" alt="Avatar">
+      </div>
+
+      <!-- Message Box -->
+      <div class="message-box">
+        <i class="fas fa-quote-right quote-icon"></i>
+        <p>
+          <span class="highlight">Semangat Bekerja!</span><br>
+          Semoga pekerjaan hari ini berjalan lancar.<br>
+          <span class="highlight-2">Tetap fokus</span>, 
+          <span class="highlight-3">tetap kompak</span>, 
+          dan <span class="highlight">terus berkembang</span> bersama.
+        </p>
+      </div>
+
+      <!-- Enter Button -->
+      <button class="btn-enter" id="btnEnter">
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <i class="fas fa-rocket"></i>
+        Masuk ke Dashboard
+        <i class="fas fa-arrow-right"></i>
+      </button>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+      // ========== GET USER DATA ==========
+      function getUserData() {
+        try {
+          const savedUser = localStorage.getItem('hrpro_current_user');
+          if (savedUser) {
+            const user = JSON.parse(savedUser);
+            return {
+              name: user.name || user.email || 'User',
+              email: user.email || 'user@example.com',
+              photo: user.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email || 'User')}&background=3b82f6&color=fff&size=56`
+            };
+          }
+        } catch(e) {
+          console.error('Error getting user:', e);
+        }
+        return {
+          name: 'User',
+          email: 'user@example.com',
+          photo: 'https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff&size=56'
+        };
+      }
+
+      // ========== CHECK LOGIN ==========
+      function checkLogin() {
+        const savedUser = localStorage.getItem('hrpro_current_user');
+        if (!savedUser) {
+          window.location.href = 'login.html';
+          return false;
+        }
+        
+        try {
+          const user = JSON.parse(savedUser);
+          const users = JSON.parse(localStorage.getItem('hrpro_users')) || [];
+          const existing = users.find(u => u.email === user.email);
+          
+          if (!existing || (existing.role !== 'Superadmin' && existing.status !== 'Active')) {
+            localStorage.removeItem('hrpro_current_user');
+            window.location.href = 'login.html';
+            return false;
+          }
+          
+          return true;
+        } catch(e) {
+          localStorage.removeItem('hrpro_current_user');
+          window.location.href = 'login.html';
+          return false;
+        }
+      }
+
+      if (!checkLogin()) return;
+
+      // ========== SET USER NAME & EMAIL ==========
+      const userData = getUserData();
+      
+      // Set name with animation
+      const nameDisplay = document.getElementById('userNameDisplay');
+      if (nameDisplay) {
+        nameDisplay.textContent = userData.name;
+        nameDisplay.style.opacity = '0';
+        setTimeout(() => {
+          nameDisplay.style.transition = 'opacity 1s ease, transform 0.8s ease';
+          nameDisplay.style.opacity = '1';
+          nameDisplay.style.transform = 'translateZ(20px)';
+        }, 300);
+      }
+
+      // Set email
+      const emailText = document.getElementById('userEmailText');
+      if (emailText) {
+        emailText.textContent = userData.email;
+        emailText.style.opacity = '0';
+        setTimeout(() => {
+          emailText.style.transition = 'opacity 1s ease';
+          emailText.style.opacity = '1';
+        }, 500);
+      }
+
+      // Set avatar
+      const avatar = document.getElementById('userAvatar');
+      if (avatar) {
+        avatar.src = userData.photo;
+        avatar.style.opacity = '0';
+        avatar.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+          avatar.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+          avatar.style.opacity = '1';
+          avatar.style.transform = 'scale(1)';
+        }, 200);
+      }
+
+      console.log('👋 Welcome,', userData.name);
+      console.log('📧 Email:', userData.email);
+
+      // ========== 3D TILT EFFECT ==========
+      const card = document.getElementById('welcomeCard');
+      let isHovering = false;
+
+      card.addEventListener('mousemove', function(e) {
+        if (isHovering) return;
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -6;
+        const rotateY = ((x - centerX) / centerX) * 6;
+        
+        this.style.transition = 'transform 0.1s ease';
+        this.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(15px)`;
+      });
+
+      card.addEventListener('mouseleave', function() {
+        isHovering = false;
+        this.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        this.style.transform = 'rotateX(5deg) rotateY(-3deg) translateZ(0)';
+        setTimeout(() => {
+          this.style.transition = '';
+        }, 600);
+      });
+
+      card.addEventListener('mouseenter', function() {
+        isHovering = true;
+        this.style.transition = 'transform 0.1s ease';
+      });
+
+      // ========== ENTER BUTTON ==========
+      const btnEnter = document.getElementById('btnEnter');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+
+      btnEnter.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Animasi button click
+        this.style.transition = 'transform 0.15s ease';
+        this.style.transform = 'translateZ(5px) scale(0.97)';
+        setTimeout(() => {
+          this.style.transform = '';
+        }, 200);
+
+        // Show loading
+        loadingOverlay.classList.add('active');
+
+        // Simpan bahwa user sudah melihat welcome
+        try {
+          const savedUser = localStorage.getItem('hrpro_current_user');
+          if (savedUser) {
+            const user = JSON.parse(savedUser);
+            user.hasSeenWelcome = true;
+            localStorage.setItem('hrpro_current_user', JSON.stringify(user));
+          }
+        } catch(e) {}
+
+        // Redirect ke dashboard setelah delay
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 800);
+      });
+
+      // ========== KEYBOARD SUPPORT ==========
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btnEnter.click();
+        }
+      });
+
+      // ========== PREVENT BACK NAVIGATION ==========
+      window.addEventListener('popstate', function(e) {
+        if (window.location.pathname.includes('welcome.html')) {
+          const savedUser = localStorage.getItem('hrpro_current_user');
+          if (!savedUser) {
+            window.location.href = 'login.html';
+          }
+        }
+      });
+
+      console.log('✨ Welcome page loaded with premium effects!');
+      console.log('❄️ Snowflakes: Active');
+      console.log('✨ Sparkles: Active');
+      console.log('🖼️ Background Image: Active');
+    });
+  </script>
+
+</body>
+</html>

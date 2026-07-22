@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HATORI Group · API Telegram</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles-glass.css">
+  <style>
+    .nav-item.active-page {
+      background: rgba(59, 130, 246, 0.15);
+      color: #ffffff;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    .nav-item.active-page i {
+      color: #3b82f6;
+    }
+
+    .telegram-config {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .telegram-config .config-group {
+      margin-bottom: 24px;
+    }
+
+    .telegram-config .config-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 6px;
+    }
+
+    .telegram-config .config-group label i {
+      margin-right: 6px;
+      color: #3b82f6;
+    }
+
+    .telegram-config .config-group input,
+    .telegram-config .config-group select {
+      width: 100%;
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      transition: 0.3s;
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffffff;
+    }
+
+    .telegram-config .config-group input:focus,
+    .telegram-config .config-group select:focus {
+      outline: none;
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+    }
+
+    .telegram-config .config-group input::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .telegram-config .config-group .input-help {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.35);
+      margin-top: 4px;
+    }
+
+    .telegram-config .config-group .input-help a {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+
+    .telegram-config .config-group .input-help a:hover {
+      text-decoration: underline;
+    }
+
+    .telegram-config .btn-telegram {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-telegram-primary {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #ffffff;
+    }
+
+    .btn-telegram-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-telegram-success {
+      background: rgba(22, 163, 74, 0.25);
+      color: #4ade80;
+      border: 1px solid rgba(22, 163, 74, 0.2);
+    }
+
+    .btn-telegram-success:hover {
+      background: rgba(22, 163, 74, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(22, 163, 74, 0.15);
+    }
+
+    .btn-telegram-danger {
+      background: rgba(220, 38, 38, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(220, 38, 38, 0.15);
+    }
+
+    .btn-telegram-danger:hover {
+      background: rgba(220, 38, 38, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .btn-telegram-outline {
+      background: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-telegram-outline:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+    }
+
+    .telegram-status {
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: none;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .telegram-status.active {
+      display: flex;
+      background: rgba(22, 163, 74, 0.12);
+      border: 1px solid rgba(22, 163, 74, 0.2);
+    }
+
+    .telegram-status.inactive {
+      display: flex;
+      background: rgba(220, 38, 38, 0.12);
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+
+    .telegram-status .status-icon {
+      font-size: 28px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .telegram-status.active .status-icon {
+      background: rgba(22, 163, 74, 0.2);
+      color: #4ade80;
+    }
+
+    .telegram-status.inactive .status-icon {
+      background: rgba(220, 38, 38, 0.2);
+      color: #f87171;
+    }
+
+    .telegram-status .status-text h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .telegram-status .status-text p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      margin: 2px 0 0;
+    }
+
+    .telegram-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .telegram-notification-preview {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 16px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 16px;
+    }
+
+    .telegram-notification-preview .preview-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .telegram-notification-preview .preview-header i {
+      color: #3b82f6;
+      font-size: 18px;
+    }
+
+    .telegram-notification-preview .preview-header span {
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 13px;
+    }
+
+    .telegram-notification-preview .preview-body {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.8;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .telegram-notification-preview .preview-body .hl {
+      color: #facc15;
+      font-weight: 600;
+    }
+
+    .telegram-notification-preview .preview-body .hl-blue {
+      color: #60a5fa;
+      font-weight: 600;
+    }
+
+    .telegram-notification-preview .preview-body .hl-green {
+      color: #4ade80;
+      font-weight: 600;
+    }
+
+    .telegram-notification-preview .preview-body .hl-red {
+      color: #f87171;
+      font-weight: 600;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-weight: 500;
+      font-size: 14px;
+      z-index: 9999;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      animation: slideUp 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      max-width: 450px;
+    }
+
+    .toast-success {
+      background: rgba(22, 163, 74, 0.9);
+      color: #ffffff;
+      border: 1px solid rgba(22, 163, 74, 0.3);
+    }
+
+    .toast-error {
+      background: rgba(220, 38, 38, 0.9);
+      color: #ffffff;
+      border: 1px solid rgba(220, 38, 38, 0.3);
+    }
+
+    .toast-info {
+      background: rgba(59, 130, 246, 0.9);
+      color: #ffffff;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .telegram-actions {
+        flex-direction: column;
+      }
+      .telegram-actions .btn-telegram {
+        justify-content: center;
+        width: 100%;
+      }
+      .telegram-status {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedUser = localStorage.getItem('hrpro_current_user');
+      if (!savedUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      try {
+        const user = JSON.parse(savedUser);
+        const users = JSON.parse(localStorage.getItem('hrpro_users')) || [];
+        const existing = users.find(u => u.email === user.email);
+        
+        if (existing && (existing.role === 'Superadmin' || existing.status === 'Active')) {
+          const nameEl = document.getElementById('userName');
+          const roleEl = document.getElementById('userRole');
+          if (nameEl) nameEl.textContent = existing.name || existing.email;
+          if (roleEl) roleEl.textContent = existing.role;
+          
+          const role = existing.role;
+          const navItems = document.querySelectorAll('.nav-item');
+          
+          let allowedMenus = [];
+          let rolesDataLocal = [];
+          try {
+            const saved = localStorage.getItem('hrpro_roles_data');
+            if (saved) {
+              rolesDataLocal = JSON.parse(saved);
+            }
+          } catch(e) {}
+          
+          const roleData = rolesDataLocal.find(r => r.roleName === role);
+          
+          if (roleData) {
+            allowedMenus = roleData.menus || [];
+          } else {
+            const defaultMenus = {
+              'Superadmin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'roles', 'pengaturan', 'api-telegram'],
+              'Admin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'api-telegram'],
+              'User': ['dashboard', 'karyawan', 'izin']
+            };
+            allowedMenus = defaultMenus[role] || defaultMenus['User'];
+          }
+          
+          if (role === 'Admin') {
+            allowedMenus = allowedMenus.filter(menu => 
+              menu !== 'roles' && menu !== 'pengaturan'
+            );
+          }
+          
+          navItems.forEach(item => {
+            const page = item.dataset.page;
+            item.style.display = '';
+            item.style.visibility = '';
+            item.style.height = '';
+            item.style.padding = '';
+            item.style.margin = '';
+            item.style.opacity = '';
+            item.style.pointerEvents = '';
+            item.style.overflow = '';
+            item.style.minHeight = '';
+            item.classList.remove('hidden-menu');
+            
+            if (allowedMenus.includes(page)) {
+              item.style.display = 'flex';
+            } else {
+              item.classList.add('hidden-menu');
+            }
+          });
+          
+          return;
+        }
+        
+        localStorage.removeItem('hrpro_current_user');
+        window.location.href = 'login.html';
+        
+      } catch(e) {
+        localStorage.removeItem('hrpro_current_user');
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
+
+  <div class="bg-wrapper">
+    <div class="bg-blur"></div>
+  </div>
+
+  <div class="app">
+    <aside class="sidebar glass">
+      <div class="logo-area">
+        <img src="https://hijau.b-cdn.net/png-hatorigrup.png" alt="HATORI Group Logo" style="height: 40px; width: auto;">
+      </div>
+      <nav class="nav-menu">
+        <a href="dashboard.html" class="nav-item" data-page="dashboard">
+          <i class="fas fa-chart-pie"></i> Dashboard
+        </a>
+        <a href="karyawan.html" class="nav-item" data-page="karyawan">
+          <i class="fas fa-users"></i> Karyawan
+        </a>
+        <a href="izin.html" class="nav-item" data-page="izin">
+          <i class="fas fa-file-alt"></i> Izin Staff
+        </a>
+        <a href="laporan.html" class="nav-item" data-page="laporan">
+          <i class="fas fa-chart-line"></i> Laporan Izin
+        </a>
+        <a href="users.html" class="nav-item" data-page="users">
+          <i class="fas fa-users-cog"></i> Users
+        </a>
+        <a href="roles.html" class="nav-item" data-page="roles">
+          <i class="fas fa-user-tag"></i> Roles
+        </a>
+        <a href="pengaturan.html" class="nav-item" data-page="pengaturan">
+          <i class="fas fa-cog"></i> Pengaturan
+        </a>
+        <a href="api-telegram.html" class="nav-item active-page" data-page="api-telegram">
+          <i class="fab fa-telegram-plane"></i> Api Telegram
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <img src="https://ui-avatars.com/api/?name=Super+Admin&background=2A3B4C&color=fff&size=40" alt="avatar">
+          <div>
+            <span class="name" id="userName">Super Admin</span>
+            <span class="role" id="userRole">Superadmin</span>
+          </div>
+        </div>
+        <button type="button" id="logoutBtn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar glass">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Cari pengaturan API..." />
+        </div>
+        <div class="topbar-actions">
+          <span class="date-badge"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></span>
+          <button class="icon-btn" id="notifBtn"><i class="far fa-bell"></i><span class="notif-dot"></span></button>
+          <button class="icon-btn"><i class="far fa-envelope"></i></button>
+        </div>
+      </header>
+
+      <div id="pageContent">
+        <h2 style="font-weight: 600; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3); margin-bottom: 20px;">
+          <i class="fab fa-telegram-plane" style="color: #3b82f6;"></i> API Telegram
+        </h2>
+
+        <div class="telegram-config">
+          <div id="telegramStatus" class="telegram-status">
+            <div class="status-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="status-text">
+              <h4 id="statusTitle">Telegram Bot Aktif</h4>
+              <p id="statusDesc">Bot siap mengirim notifikasi ke grup yang telah diatur</p>
+            </div>
+          </div>
+
+          <div class="card glass" style="margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+              <i class="fab fa-telegram" style="font-size: 28px; color: #3b82f6;"></i>
+              <div>
+                <h3 style="font-weight: 600; color: white; font-size: 18px;">Konfigurasi Bot Telegram</h3>
+                <p style="color: rgba(255,255,255,0.4); font-size: 13px;">Atur token bot dan chat ID untuk mengirim notifikasi</p>
+              </div>
+            </div>
+
+            <form id="telegramForm">
+              <div class="config-group">
+                <label><i class="fas fa-key"></i> Bot Token</label>
+                <input type="text" id="botToken" placeholder="Masukkan Token Bot Telegram" />
+                <div class="input-help">
+                  <i class="fas fa-info-circle"></i> Dapatkan token dari <a href="https://t.me/BotFather" target="_blank">@BotFather</a> di Telegram
+                </div>
+              </div>
+
+              <div class="config-group">
+                <label><i class="fas fa-hashtag"></i> Chat ID</label>
+                <input type="text" id="chatId" placeholder="Masukkan Chat ID (contoh: -1234567890)" />
+                <div class="input-help">
+                  <i class="fas fa-info-circle"></i> 
+                  Chat ID untuk grup atau channel. Untuk grup, gunakan ID negatif.<br>
+                  <strong style="color: #facc15;">⚠️ Jangan gunakan ID Bot sebagai Chat ID!</strong>
+                </div>
+              </div>
+
+              <div class="config-group">
+                <label><i class="fas fa-bell"></i> Notifikasi Otomatis</label>
+                <select id="autoNotify">
+                  <option value="all">Semua Event</option>
+                  <option value="izin">Hanya Izin Keluar/Kembali</option>
+                  <option value="none">Tidak Aktif</option>
+                </select>
+                <div class="input-help">
+                  <i class="fas fa-info-circle"></i> Pilih event yang akan dikirim notifikasi ke Telegram
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;">
+                <button type="submit" class="btn-telegram btn-telegram-primary">
+                  <i class="fas fa-save"></i> Simpan Konfigurasi
+                </button>
+                <button type="button" class="btn-telegram btn-telegram-success" id="testNotificationBtn">
+                  <i class="fas fa-paper-plane"></i> Kirim Test Notifikasi
+                </button>
+                <button type="button" class="btn-telegram btn-telegram-danger" id="clearConfigBtn">
+                  <i class="fas fa-trash"></i> Hapus Konfigurasi
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card glass" style="margin-bottom: 20px;">
+            <div class="telegram-notification-preview">
+              <div class="preview-header">
+                <i class="fas fa-sign-out-alt" style="color: #facc15;"></i>
+                <span>Preview Izin Keluar</span>
+                <span style="margin-left: auto; font-size: 11px; color: rgba(255,255,255,0.2);">Format baru</span>
+              </div>
+              <div class="preview-body" id="previewBodyKeluar">
+HATORI GROUP
+━━━━━━━━━━━━━━━━━━━━━━
+STAFF IZIN KELUAR
+━━━━━━━━━━━━━━━━━━━━━━
+Nama       : <span class="hl">BUDI SANTOSO</span>
+Tanggal    : 21 Juli 2026
+Situs      : <span class="hl-blue">INATOGEL</span>
+Jabatan    : <span class="hl-blue">SENIOR DEVELOPER</span>
+Keterangan : <span class="hl-green">MEROKOK</span>
+Keluar     : 14.30.15
+━━━━━━━━━━━━━━━━━━━━━━
+              </div>
+            </div>
+          </div>
+
+          <div class="card glass">
+            <div class="telegram-notification-preview">
+              <div class="preview-header">
+                <i class="fas fa-sign-in-alt" style="color: #4ade80;"></i>
+                <span>Preview Kembali dari Izin</span>
+                <span style="margin-left: auto; font-size: 11px; color: rgba(255,255,255,0.2);">Format baru</span>
+              </div>
+              <div class="preview-body" id="previewBodyKembali">
+HATORI GROUP
+━━━━━━━━━━━━━━━━━━━━━━
+STAFF KEMBALI DARI IZIN
+━━━━━━━━━━━━━━━━━━━━━━
+Nama    : <span class="hl">BUDI SANTOSO</span>
+Tanggal : 21 Juli 2026
+Situs   : <span class="hl-blue">INATOGEL</span>
+Keluar  : 14.30.15
+Masuk   : 14.45.30
+Durasi  : 15 Menit
+━━━━━━━━━━━━━━━━━━━━━━
+TOTAL IZIN HARI INI
+Keluar #1 : 5 Menit
+Keluar #2 : 12 Menit
+Keluar #3 : 15 Menit
+━━━━━━━━━━━━━━━━━━━━━━
+Total   : 3
+Sisa Waktu Izin : 8 Menit
+Status  : Aman ✅
+━━━━━━━━━━━━━━━━━━━━━━
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const now = new Date();
+      const options = { day: 'numeric', month: 'short', year: 'numeric' };
+      const dateEl = document.getElementById('currentDate');
+      if (dateEl) dateEl.textContent = now.toLocaleDateString('id-ID', options);
+
+      const STORAGE_KEY = 'hrpro_telegram_config';
+
+      function getTelegramConfig() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.botToken && parsed.chatId) {
+              return parsed;
+            }
+          }
+        } catch(e) {}
+        return { botToken: '', chatId: '', autoNotify: 'all' };
+      }
+
+      function saveTelegramConfig(config) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+      }
+
+      function loadTelegramConfig() {
+        const config = getTelegramConfig();
+        document.getElementById('botToken').value = config.botToken || '';
+        document.getElementById('chatId').value = config.chatId || '';
+        document.getElementById('autoNotify').value = config.autoNotify || 'all';
+        updateStatus(config);
+        return config;
+      }
+
+      function updateStatus(config) {
+        const statusEl = document.getElementById('telegramStatus');
+        const titleEl = document.getElementById('statusTitle');
+        const descEl = document.getElementById('statusDesc');
+        
+        if (config.botToken && config.chatId) {
+          statusEl.className = 'telegram-status active';
+          statusEl.querySelector('.status-icon i').className = 'fas fa-check-circle';
+          titleEl.textContent = '✅ Telegram Bot Terhubung';
+          descEl.textContent = 'Bot siap mengirim notifikasi ke grup yang telah diatur';
+        } else {
+          statusEl.className = 'telegram-status inactive';
+          statusEl.querySelector('.status-icon i').className = 'fas fa-exclamation-circle';
+          titleEl.textContent = '⚠️ Konfigurasi Belum Lengkap';
+          descEl.textContent = 'Silakan isi Bot Token dan Chat ID untuk mengaktifkan notifikasi Telegram';
+        }
+      }
+
+      function showToast(message, type = 'info') {
+        const existingToasts = document.querySelectorAll('.toast');
+        existingToasts.forEach(t => t.remove());
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transition = 'opacity 0.5s';
+          setTimeout(() => toast.remove(), 500);
+        }, 5000);
+      }
+
+      async function sendTelegramNotification(message, parseMode = 'HTML') {
+        const config = getTelegramConfig();
+        
+        if (!config.botToken || !config.chatId) {
+          showToast('⚠️ Konfigurasi Telegram belum lengkap!', 'error');
+          return false;
+        }
+
+        if (config.chatId === config.botToken || config.chatId === '8569080174') {
+          showToast('⚠️ Chat ID tidak valid! Gunakan ID grup atau channel, bukan ID bot.', 'error');
+          return false;
+        }
+
+        try {
+          const url = `https://api.telegram.org/bot${config.botToken}/sendMessage`;
+          
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              chat_id: config.chatId,
+              text: message,
+              parse_mode: parseMode
+            })
+          });
+
+          const result = await response.json();
+          
+          if (result.ok) {
+            return true;
+          } else {
+            console.error('Telegram API Error:', result);
+            let errorMsg = '❌ Gagal mengirim pesan!';
+            if (result.description) {
+              errorMsg += `\n\nError: ${result.description}`;
+              if (result.description.includes('bot can\'t send messages')) {
+                errorMsg += '\n\n💡 Pastikan Chat ID adalah ID grup/channel yang valid dan bot sudah di-add ke grup/channel tersebut.';
+              }
+            }
+            showToast(errorMsg, 'error');
+            return false;
+          }
+        } catch (error) {
+          console.error('Error sending Telegram notification:', error);
+          showToast('❌ Gagal mengirim pesan! Cek koneksi internet Anda.', 'error');
+          return false;
+        }
+      }
+
+      const form = document.getElementById('telegramForm');
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const botToken = document.getElementById('botToken').value.trim();
+        const chatId = document.getElementById('chatId').value.trim();
+        const autoNotify = document.getElementById('autoNotify').value;
+        
+        if (!botToken || !chatId) {
+          showToast('⚠️ Harap isi Bot Token dan Chat ID!', 'error');
+          return;
+        }
+
+        if (chatId === botToken) {
+          showToast('⚠️ Chat ID tidak boleh sama dengan Bot Token!', 'error');
+          return;
+        }
+        
+        const config = { botToken, chatId, autoNotify };
+        saveTelegramConfig(config);
+        updateStatus(config);
+        
+        showToast('✅ Konfigurasi Telegram berhasil disimpan!', 'success');
+      });
+
+      document.getElementById('testNotificationBtn').addEventListener('click', async function() {
+        const config = getTelegramConfig();
+        
+        if (!config.botToken || !config.chatId) {
+          showToast('⚠️ Konfigurasi Telegram belum lengkap! Silakan isi Bot Token dan Chat ID.', 'error');
+          return;
+        }
+
+        if (config.chatId === config.botToken || config.chatId === '8569080174') {
+          showToast('⚠️ Chat ID tidak valid! Gunakan ID grup atau channel, bukan ID bot.', 'error');
+          return;
+        }
+
+        const now = new Date();
+        const time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const date = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        
+        const testMessage = `📢 <b>HATORI GROUP - Test Notifikasi</b>
+
+✅ Konfigurasi Telegram berhasil!
+📅 Tanggal: ${date}
+⏰ Waktu: ${time}
+🤖 Status: Bot berhasil terhubung
+
+📌 <b>Panduan Chat ID:</b>
+• Untuk Grup: gunakan ID negatif (contoh: -123456789)
+• Untuk Channel: gunakan ID negatif
+• Dapatkan ID dari @getidsbot atau @userinfobot
+
+Terima kasih telah menggunakan HATORI GROUP BOT!`;
+
+        const result = await sendTelegramNotification(testMessage);
+        if (result) {
+          showToast('✅ Test notifikasi berhasil dikirim ke Telegram!', 'success');
+        }
+      });
+
+      document.getElementById('clearConfigBtn').addEventListener('click', function() {
+        if (confirm('Yakin ingin menghapus semua konfigurasi Telegram?')) {
+          localStorage.removeItem(STORAGE_KEY);
+          document.getElementById('botToken').value = '';
+          document.getElementById('chatId').value = '';
+          document.getElementById('autoNotify').value = 'all';
+          updateStatus({ botToken: '', chatId: '', autoNotify: 'all' });
+          showToast('✅ Konfigurasi Telegram berhasil dihapus!', 'info');
+        }
+      });
+
+      loadTelegramConfig();
+
+      document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        const search = this.value.toLowerCase();
+        const cards = document.querySelectorAll('.card.glass');
+        cards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          card.style.display = text.includes(search) ? '' : 'none';
+        });
+      });
+
+      window.sendTelegramIzinKeluar = async function(nama, situs, posisi, jam, keterangan, sisaKuota) {
+        const config = getTelegramConfig();
+        
+        if (!config.botToken || !config.chatId) return false;
+        if (config.autoNotify === 'none') return false;
+        if (config.chatId === config.botToken || config.chatId === '8569080174') {
+          console.log('⚠️ Chat ID tidak valid, notifikasi tidak dikirim');
+          return false;
+        }
+        
+        const now = new Date();
+        const time = now.toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          timeZone: 'Asia/Jakarta'
+        });
+        const date = now.toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          timeZone: 'Asia/Jakarta'
+        });
+        
+        let message = '';
+        message += `HATORI GROUP\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `STAFF IZIN KELUAR\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `Nama       : ${nama}\n`;
+        message += `Tanggal    : ${date}\n`;
+        message += `Situs      : ${situs}\n`;
+        message += `Jabatan    : ${posisi}\n`;
+        message += `Keterangan : ${keterangan}\n`;
+        message += `Keluar     : ${time}\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+
+        try {
+          const url = `https://api.telegram.org/bot${config.botToken}/sendMessage`;
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: config.chatId,
+              text: message,
+              parse_mode: 'HTML'
+            })
+          });
+          const result = await response.json();
+          return result.ok;
+        } catch(e) {
+          console.error('Error sending Telegram notification:', e);
+          return false;
+        }
+      };
+
+      window.sendTelegramIzinKembali = async function(nama, situs, posisi, jamIzin, jamKembali, durasi) {
+        const config = getTelegramConfig();
+        
+        if (!config.botToken || !config.chatId) return false;
+        if (config.autoNotify === 'none') return false;
+        if (config.chatId === config.botToken || config.chatId === '8569080174') {
+          console.log('⚠️ Chat ID tidak valid, notifikasi tidak dikirim');
+          return false;
+        }
+
+        const now = new Date();
+        const time = now.toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          timeZone: 'Asia/Jakarta'
+        });
+        const date = now.toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          timeZone: 'Asia/Jakarta'
+        });
+        
+        let message = '';
+        message += `HATORI GROUP\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `STAFF KEMBALI DARI IZIN\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `Nama    : ${nama}\n`;
+        message += `Tanggal : ${date}\n`;
+        message += `Situs   : ${situs}\n`;
+        message += `Keluar  : ${jamIzin}\n`;
+        message += `Masuk   : ${time}\n`;
+        let durasiText = durasi || '0 menit';
+        if (durasiText === '-' || !durasiText) durasiText = '0 menit';
+        message += `Durasi  : ${durasiText}\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+
+        try {
+          const url = `https://api.telegram.org/bot${config.botToken}/sendMessage`;
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: config.chatId,
+              text: message,
+              parse_mode: 'HTML'
+            })
+          });
+          const result = await response.json();
+          return result.ok;
+        } catch(e) {
+          console.error('Error sending Telegram notification:', e);
+          return false;
+        }
+      };
+
+      console.log('📱 API Telegram page loaded successfully!');
+      console.log('🤖 Bot Token:', getTelegramConfig().botToken ? '✅ Set' : '❌ Not Set');
+      console.log('📋 Chat ID:', getTelegramConfig().chatId ? '✅ Set' : '❌ Not Set');
+    });
+
+    function doLogout() {
+      if (confirm('Apakah Anda yakin ingin logout?')) {
+        localStorage.removeItem('hrpro_current_user');
+        window.location.href = 'login.html';
+        return false;
+      }
+      return false;
+    }
+    
+    (function() {
+      const btn = document.getElementById('logoutBtn');
+      if (btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          doLogout();
+          return false;
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>HATORI Group</title>
+  <style>
+    /* Loading Screen Style */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f0f1a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 40px;
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.05);
+      border-top: 3px solid #3b82f6;
+      border-right: 3px solid #6366f1;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    
+    .loading-logo {
+      height: 45px;
+      width: auto;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 4px 20px rgba(59, 130, 246, 0.15));
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div class="loading-container" id="loadingScreen">
+    <img src="https://hijau.b-cdn.net/png-hatorigrup.png" alt="HATORI Group" class="loading-logo">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">🔄 Memuat aplikasi...</div>
+  </div>
+
+  <script>
+    /**
+     * ============================================
+     * HATORI GROUP - MAIN INDEX
+     * ============================================
+     * Entry point aplikasi. Menangani:
+     * 1. Cek status login user
+     * 2. Inisialisasi database (Supabase)
+     * 3. Redirect ke halaman yang sesuai
+     * ============================================
+     */
+
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 HATORI Group App Starting...');
+      
+      // ============================================
+      // 1. FUNGSI HELPER
+      // ============================================
+      
+      function updateLoadingText(text) {
+        const el = document.getElementById('loadingText');
+        if (el) el.textContent = text;
+      }
+
+      function getUsers() {
+        try {
+          return JSON.parse(localStorage.getItem('hrpro_users')) || [];
+        } catch(e) {
+          return [];
+        }
+      }
+
+      // ============================================
+      // 2. CEK STATUS LOGIN
+      // ============================================
+      
+      async function checkLoginAndRedirect() {
+        const savedUser = localStorage.getItem('hrpro_current_user');
+        
+        // Jika tidak ada user login, redirect ke login
+        if (!savedUser) {
+          console.log('👤 No user logged in, redirecting to login...');
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        try {
+          const user = JSON.parse(savedUser);
+          const users = getUsers();
+          const existing = users.find(u => u.email === user.email);
+          
+          // Validasi user
+          if (!existing || (existing.role !== 'Superadmin' && existing.status !== 'Active')) {
+            console.log('⚠️ User not active or not found, redirecting to login...');
+            localStorage.removeItem('hrpro_current_user');
+            window.location.href = 'login.html';
+            return;
+          }
+          
+          console.log(`👤 User logged in: ${existing.name} (${existing.role})`);
+          
+          // ============================================
+          // 3. INISIALISASI DATABASE
+          // ============================================
+          
+          // Cek apakah fungsi initDatabase tersedia
+          if (typeof window.initDatabase === 'function') {
+            updateLoadingText('🗄️ Menghubungkan ke database...');
+            console.log('🗄️ Initializing database...');
+            
+            try {
+              await window.initDatabase();
+              console.log('✅ Database initialized successfully!');
+            } catch (dbError) {
+              console.warn('⚠️ Database init warning:', dbError);
+              // Tetap lanjut meskipun ada error database
+            }
+          } else {
+            console.warn('⚠️ Database module (db.js) not loaded, skipping init');
+          }
+          
+          // ============================================
+          // 4. REDIRECT KE HALAMAN YANG SESUAI
+          // ============================================
+          
+          updateLoadingText('✅ Memuat dashboard...');
+          
+          // Cek apakah user sudah melihat welcome page
+          if (user.hasSeenWelcome) {
+            console.log('➡️ Redirecting to dashboard...');
+            window.location.href = 'dashboard.html';
+          } else {
+            console.log('➡️ Redirecting to welcome page...');
+            window.location.href = 'welcome.html';
+          }
+          
+        } catch (error) {
+          console.error('❌ Error in login check:', error);
+          localStorage.removeItem('hrpro_current_user');
+          window.location.href = 'login.html';
+        }
+      }
+
+      // ============================================
+      // 5. JALANKAN
+      // ============================================
+      
+      // Tunggu sebentar agar loading screen terlihat
+      setTimeout(() => {
+        checkLoginAndRedirect();
+      }, 500);
+      
+      console.log('✅ Index page loaded successfully!');
+    });
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   "description": "HATORI Group HR Management System - Desktop App",
   "main": "electron/main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron ."
     "build": "electron-builder",
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",

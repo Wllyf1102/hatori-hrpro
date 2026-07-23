@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HATORI Group · Roles</title>
+  <title>HATORI Group · Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +17,148 @@
     }
     .nav-item.active-page i {
       color: #3b82f6;
+    }
+
+    /* Dashboard Card Styles - Grid 4 Kolom Rapi */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .dashboard-grid .stat-card {
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      min-height: 85px;
+    }
+
+    .dashboard-grid .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .dashboard-grid .stat-card .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .dashboard-grid .stat-card .stat-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .dashboard-grid .stat-card .stat-info .stat-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.45);
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dashboard-grid .stat-card .stat-info .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      display: block;
+      margin: 1px 0 2px;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+    }
+
+    .dashboard-grid .stat-card .stat-info .stat-link {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.3);
+      display: block;
+      transition: 0.3s ease;
+    }
+
+    .dashboard-grid .stat-card:hover .stat-link {
+      color: #3b82f6;
+    }
+
+    /* Disabled stat card - tetap terlihat tapi tidak bisa diklik */
+    .dashboard-grid .stat-card.disabled {
+      cursor: default;
+    }
+
+    .dashboard-grid .stat-card.disabled .stat-link {
+      color: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    .dashboard-grid .stat-card.disabled:hover {
+      transform: none !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    /* Warna Icon */
+    .stat-icon.blue { background: rgba(59, 130, 246, 0.3); }
+    .stat-icon.green { background: rgba(22, 163, 74, 0.3); }
+    .stat-icon.orange { background: rgba(234, 88, 12, 0.3); }
+    .stat-icon.red { background: rgba(220, 38, 38, 0.3); }
+    .stat-icon.purple { background: rgba(139, 92, 246, 0.3); }
+    .stat-icon.teal { background: rgba(20, 184, 166, 0.3); }
+    .stat-icon.pink { background: rgba(236, 72, 153, 0.3); }
+    .stat-icon.cyan { background: rgba(6, 182, 212, 0.3); }
+    .stat-icon.indigo { background: rgba(99, 102, 241, 0.3); }
+    .stat-icon.sky { background: rgba(56, 189, 248, 0.3); }
+
+    /* Access denied badge untuk link */
+    .access-denied-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      background: rgba(237, 5, 5, 0.12);
+      color: #e40303;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 500;
+      margin-left: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Two Column Layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -43,11 +185,11 @@
           
           const role = existing.role;
           const navItems = document.querySelectorAll('.nav-item');
-const allowedMenus = {
-  'Superadmin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'roles', 'pengaturan', 'api-telegram'],
-  'Admin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'api-telegram'],
-  'User': ['dashboard', 'karyawan', 'izin']
-};
+          const allowedMenus = {
+            'Superadmin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'roles', 'pengaturan', 'api-telegram'],
+            'Admin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'api-telegram'],
+            'User': ['dashboard', 'karyawan', 'izin']
+          };
           
           const allowed = allowedMenus[role] || allowedMenus['User'];
           
@@ -81,11 +223,11 @@ const allowedMenus = {
   <div class="app">
     <!-- SIDEBAR -->
     <aside class="sidebar glass">
-<div class="logo-area">
-  <img src="https://hijau.b-cdn.net/png-hatorigrup.png" alt="Hatori Group Logo" style="height: 40px; width: auto;">
-</div>
+      <div class="logo-area">
+        <img src="https://hijau.b-cdn.net/png-hatorigrup.png" alt="HATORI Group Logo" style="height: 40px; width: auto;">
+      </div>
       <nav class="nav-menu">
-        <a href="dashboard.html" class="nav-item" data-page="dashboard">
+        <a href="dashboard.html" class="nav-item active-page" data-page="dashboard">
           <i class="fas fa-chart-pie"></i> Dashboard
         </a>
         <a href="karyawan.html" class="nav-item" data-page="karyawan">
@@ -100,15 +242,15 @@ const allowedMenus = {
         <a href="users.html" class="nav-item" data-page="users">
           <i class="fas fa-users-cog"></i> Users
         </a>
-        <a href="roles.html" class="nav-item active-page" data-page="roles">
+        <a href="roles.html" class="nav-item" data-page="roles">
           <i class="fas fa-user-tag"></i> Roles
         </a>
-<a href="pengaturan.html" class="nav-item" data-page="pengaturan">
-  <i class="fas fa-cog"></i> Pengaturan
-</a>
-<a href="api-telegram.html" class="nav-item" data-page="api-telegram">
-  <i class="fab fa-telegram-plane"></i> Api Telegram
-</a>
+        <a href="pengaturan.html" class="nav-item" data-page="pengaturan">
+          <i class="fas fa-cog"></i> Pengaturan
+        </a>
+        <a href="api-telegram.html" class="nav-item" data-page="api-telegram">
+          <i class="fab fa-telegram-plane"></i> Api Telegram
+        </a>
       </nav>
       <div class="sidebar-footer">
         <div class="user-badge">
@@ -129,7 +271,7 @@ const allowedMenus = {
       <header class="topbar glass">
         <div class="search-wrapper">
           <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Cari role..." />
+          <input type="text" id="searchInput" placeholder="Cari karyawan atau absensi..." />
         </div>
         <div class="topbar-actions">
           <span class="date-badge"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></span>
@@ -138,33 +280,123 @@ const allowedMenus = {
         </div>
       </header>
 
-      <!-- PAGE CONTENT -->
-      <div id="pageContent">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-          <h2 style="font-weight: 600; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
-            <i class="fas fa-user-tag" style="color: #3b82f6;"></i> Manajemen Roles
-          </h2>
-          <button class="btn-add" id="btnTambahRole">
-            <i class="fas fa-plus"></i> Tambah Role
-          </button>
+      <!-- ROW 1: 4 CARD -->
+      <div class="dashboard-grid">
+        <div class="stat-card glass" data-page="karyawan" data-situs="" data-posisi="" id="cardTotalKaryawan">
+          <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Karyawan Keseluruhan</span>
+            <span class="stat-value" id="totalKaryawan">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
         </div>
-        <div class="card glass">
+        <div class="stat-card glass" data-page="karyawan" data-situs="Inatogel" data-posisi="" id="cardInatogel">
+          <div class="stat-icon orange"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Inatogel</span>
+            <span class="stat-value" id="totalInatogel">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="Kepritogel" data-posisi="" id="cardKepritogel">
+          <div class="stat-icon red"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Kepritogel</span>
+            <span class="stat-value" id="totalKepritogel">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="Hatoribet" data-posisi="" id="cardHatoribet">
+          <div class="stat-icon purple"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Hatoribet</span>
+            <span class="stat-value" id="totalHatoribet">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: 4 CARD -->
+      <div class="dashboard-grid" style="margin-bottom: 24px;">
+        <div class="stat-card glass" data-page="karyawan" data-situs="Livitoto" data-posisi="" id="cardLivitoto">
+          <div class="stat-icon teal"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Livitoto</span>
+            <span class="stat-value" id="totalLivitoto">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="Hmd29" data-posisi="" id="cardHmd29">
+          <div class="stat-icon pink"><i class="fas fa-building"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Hmd29</span>
+            <span class="stat-value" id="totalHmd29">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="" data-posisi="LiveChat" id="cardLiveChat">
+          <div class="stat-icon cyan"><i class="fas fa-comments"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff LiveChat</span>
+            <span class="stat-value" id="totalLiveChat">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+        <div class="stat-card glass" data-page="karyawan" data-situs="" data-posisi="Seo" id="cardSeo">
+          <div class="stat-icon indigo"><i class="fas fa-chart-line"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Staff Seo</span>
+            <span class="stat-value" id="totalSeo">0</span>
+            <span class="stat-link">Klik untuk lihat semua →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TWO COLUMN LAYOUT ===== -->
+      <div class="two-col">
+        <!-- Left: History Izin -->
+        <section class="card glass table-card">
+          <div class="card-header">
+            <h3><i class="fas fa-clock" style="color: #facc15;"></i> History Izin Staff Hari Ini</h3>
+            <a href="izin.html" class="link-more">Lihat semua <i class="fas fa-chevron-right"></i></a>
+          </div>
           <div class="table-responsive">
             <table>
               <thead>
                 <tr>
-                  <th>No.</th>
-                  <th>Role Name</th>
-                  <th>Menu Yang Diizinkan</th>
-                  <th>Permissions</th>
+                  <th>Nama</th>
+                  <th>Divisi</th>
                   <th>Status</th>
-                  <th>Actions</th>
+                  <th>Jam Izin</th>
+                  <th>Keterangan</th>
                 </tr>
               </thead>
-              <tbody id="rolesTableBody"></tbody>
+              <tbody id="historyIzinTableBody"></tbody>
             </table>
           </div>
-        </div>
+        </section>
+
+        <!-- Right: Data Karyawan -->
+        <section class="card glass chart-card">
+          <div class="card-header">
+            <h3><i class="fas fa-users" style="color: #3b82f6;"></i> Data Karyawan</h3>
+            <a href="karyawan.html" class="link-more" id="linkKelolaKaryawan">Kelola <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="table-responsive" style="max-height: 320px; overflow-y: auto; scroll-behavior: smooth;">
+            <table>
+              <thead style="position: sticky; top: 0; z-index: 10; background: rgba(15,15,26,0.95);">
+                <tr>
+                  <th>Nama</th>
+                  <th>Inisial</th>
+                  <th>Situs</th>
+                  <th>Posisi</th>
+                  <th>Tanggal Join</th>
+                </tr>
+              </thead>
+              <tbody id="dataKaryawanTableBody"></tbody>
+            </table>
+          </div>
+        </section>
       </div>
     </main>
   </div>
@@ -207,15 +439,9 @@ const allowedMenus = {
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Divisi <span class="required">*</span></label>
+            <label>Situs <span class="required">*</span></label>
             <select id="inputDivisi" required>
-              <option value="">Pilih Divisi</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Finance">Finance</option>
-              <option value="HR">HR</option>
-              <option value="Design">Design</option>
-              <option value="Operations">Operations</option>
+              <option value="">Pilih Situs</option>
             </select>
           </div>
           <div class="form-group">
@@ -300,11 +526,6 @@ const allowedMenus = {
           <label>Keterangan Izin <span class="required">*</span></label>
           <select id="inputKeteranganIzin" required>
             <option value="">Pilih Keterangan</option>
-            <option value="Merokok">🚬 Merokok</option>
-            <option value="BAB">🚽 BAB</option>
-            <option value="Kencin">☕ Kencin (Kopi)</option>
-            <option value="Ambil Makan">🍚 Ambil Makan</option>
-            <option value="Ambil Kopi">☕ Ambil Kopi</option>
           </select>
         </div>
         <div class="modal-footer">
@@ -467,33 +688,32 @@ const allowedMenus = {
         
         <div class="form-group">
           <label>Menu Yang Diizinkan <span class="required">*</span></label>
-<!-- Di dalam modal Role, tambahkan checkbox Api Telegram -->
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-        <input type="checkbox" class="menu-checkbox" value="dashboard"> Dashboard
-    </label>
-    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-        <input type="checkbox" class="menu-checkbox" value="karyawan"> Karyawan
-    </label>
-    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-        <input type="checkbox" class="menu-checkbox" value="izin"> Izin Staff
-    </label>
-    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-        <input type="checkbox" class="menu-checkbox" value="laporan"> Laporan Izin
-    </label>
-    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-        <input type="checkbox" class="menu-checkbox" value="users"> Users
-    </label>
-    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-        <input type="checkbox" class="menu-checkbox" value="pengaturan"> Pengaturan
-    </label>
-    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-        <input type="checkbox" class="menu-checkbox" value="api-telegram"> Api Telegram
-    </label>
-    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-        <input type="checkbox" class="menu-checkbox" value="roles"> Roles
-    </label>
-</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="dashboard"> Dashboard
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="karyawan"> Karyawan
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="izin"> Izin Staff
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="laporan"> Laporan Izin
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="users"> Users
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="pengaturan"> Pengaturan
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="api-telegram"> Api Telegram
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" class="menu-checkbox" value="roles"> Roles
+            </label>
+          </div>
         </div>
         
         <div class="form-group">
@@ -534,6 +754,9 @@ const allowedMenus = {
     function doLogout() {
       if (confirm('Apakah Anda yakin ingin logout?')) {
         localStorage.removeItem('hrpro_current_user');
+        localStorage.removeItem('hrpro_last_page');
+        localStorage.removeItem('hrpro_filter_situs');
+        localStorage.removeItem('hrpro_filter_posisi');
         window.location.href = 'login.html';
         return false;
       }
@@ -554,9 +777,8 @@ const allowedMenus = {
   </script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../js/db.js"></script>
 <script src="../js/dashboard.js"></script>
-  <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
       // Update current date
       const now = new Date();
@@ -564,9 +786,94 @@ const allowedMenus = {
       const dateEl = document.getElementById('currentDate');
       if (dateEl) dateEl.textContent = now.toLocaleDateString('id-ID', options);
       
-      // Render roles
-      renderRoles();
-      setupRolesEvents();
+      // ===== PASTIKAN DATA TELAH DIMUAT =====
+      console.log('🔍 Dashboard - Memuat data...');
+      
+      // Coba load data dari localStorage
+      try {
+        const savedKaryawan = localStorage.getItem('hrpro_karyawan_data');
+        if (savedKaryawan) {
+          const parsed = JSON.parse(savedKaryawan);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            if (typeof karyawanData !== 'undefined') {
+              karyawanData = parsed;
+              console.log('✅ Karyawan data loaded:', karyawanData.length, 'items');
+            }
+          }
+        }
+      } catch(e) {
+        console.error('Error loading karyawan data:', e);
+      }
+      
+      try {
+        const savedIzin = localStorage.getItem('hrpro_izin_data');
+        if (savedIzin) {
+          const parsed = JSON.parse(savedIzin);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            if (typeof izinData !== 'undefined') {
+              izinData = parsed;
+              console.log('✅ Izin data loaded:', izinData.length, 'items');
+            }
+          }
+        }
+      } catch(e) {
+        console.error('Error loading izin data:', e);
+      }
+      
+      // ===== CEK AKSES KARYAWAN =====
+      const hasAccessKaryawan = canViewMenu('karyawan');
+      console.log('🔑 Has access to Karyawan:', hasAccessKaryawan);
+      
+      // ===== ATUR LINK KELOLA KARYAWAN =====
+      const linkKelola = document.getElementById('linkKelolaKaryawan');
+      if (linkKelola) {
+        if (!hasAccessKaryawan) {
+          // Sembunyikan link "Kelola"
+          linkKelola.style.display = 'none';
+          // Tambahkan indikator akses ditolak
+          const header = linkKelola.closest('.card-header');
+          if (header) {
+            const indicator = document.createElement('span');
+            indicator.className = 'access-denied-badge';
+            indicator.textContent = '🔒 Akses ditolak';
+            header.appendChild(indicator);
+          }
+          console.log('❌ Link "Kelola Karyawan" disembunyikan untuk role User');
+        }
+      }
+      
+      // ===== ATUR STAT CARD - TETAP DITAMPILKAN TAPI TIDAK BISA DIKLIK =====
+      // Perbaikan: Kita tidak perlu menambahkan class disabled di sini
+      // karena akan ditangani oleh setupStatCardEvents
+      
+      // ===== RENDER DATA =====
+      console.log('📊 Rendering dashboard data...');
+      
+      // Render History Izin Hari Ini
+      if (typeof renderHistoryIzinHariIni === 'function') {
+        renderHistoryIzinHariIni();
+      }
+      
+      // Render Data Karyawan
+      if (typeof renderDataKaryawan === 'function') {
+        renderDataKaryawan();
+      }
+      
+      // Render statistik
+      if (typeof updateTotalKaryawan === 'function') {
+        updateTotalKaryawan();
+      }
+      
+      if (typeof updateDashboardStats === 'function') {
+        updateDashboardStats();
+      }
+      
+      // Setup stat card events - tunggu sampai semua data siap
+      setTimeout(function() {
+        if (typeof setupStatCardEvents === 'function') {
+          setupStatCardEvents();
+        }
+      }, 300);
     });
   </script>
 </body>

@@ -5286,6 +5286,119 @@ if (document.getElementById('searchInput')) {
     setupGlobalSearch();
 }
 
+// ========== DATABASE SYNC FUNCTIONS ==========
+
+async function syncDataFromDatabase() {
+    console.log('🔄 Syncing data from database...');
+    
+    if (!window.db || !window.db.isDatabaseConnected()) {
+        console.warn('⚠️ Database not connected, skipping sync');
+        return false;
+    }
+    
+    try {
+        // Sync Karyawan
+        const karyawanDataFromDB = await window.db.getKaryawan();
+        if (karyawanDataFromDB && Array.isArray(karyawanDataFromDB)) {
+            if (karyawanDataFromDB.length > 0) {
+                karyawanData = karyawanDataFromDB;
+                console.log('✅ Karyawan synced from database:', karyawanData.length);
+                localStorage.setItem('hrpro_karyawan_data', JSON.stringify(karyawanData));
+            }
+        }
+        
+        // Sync Izin
+        const izinDataFromDB = await window.db.getIzin();
+        if (izinDataFromDB && Array.isArray(izinDataFromDB)) {
+            if (izinDataFromDB.length > 0) {
+                izinData = izinDataFromDB;
+                console.log('✅ Izin synced from database:', izinData.length);
+                localStorage.setItem('hrpro_izin_data', JSON.stringify(izinData));
+            }
+        }
+        
+        // Sync Users
+        const usersFromDB = await window.db.getUsers();
+        if (usersFromDB && Array.isArray(usersFromDB)) {
+            if (usersFromDB.length > 0) {
+                usersData = usersFromDB;
+                console.log('✅ Users synced from database:', usersData.length);
+                localStorage.setItem('hrpro_users', JSON.stringify(usersData));
+            }
+        }
+        
+        // Sync Roles
+        const rolesFromDB = await window.db.getRoles();
+        if (rolesFromDB && Array.isArray(rolesFromDB)) {
+            if (rolesFromDB.length > 0) {
+                rolesData = rolesFromDB;
+                console.log('✅ Roles synced from database:', rolesData.length);
+                localStorage.setItem('hrpro_roles_data', JSON.stringify(rolesData));
+            }
+        }
+        
+        // Refresh UI
+        refreshAllUI();
+        return true;
+    } catch (error) {
+        console.error('❌ Error syncing data:', error);
+        return false;
+    }
+}
+
+function refreshAllUI() {
+    if (typeof updateDashboardStats === 'function') updateDashboardStats();
+    if (typeof renderHistoryIzinHariIni === 'function') renderHistoryIzinHariIni();
+    if (typeof renderDataKaryawan === 'function') renderDataKaryawan();
+    if (typeof updateTotalKaryawan === 'function') updateTotalKaryawan();
+    if (typeof renderIzinStaff === 'function') renderIzinStaff();
+    if (typeof renderUsers === 'function') renderUsers();
+    if (typeof renderRoles === 'function') renderRoles();
+    if (typeof renderKaryawan === 'function') renderKaryawan();
+    if (typeof updateSettingsPreview === 'function') updateSettingsPreview();
+    if (typeof setupStatCardEvents === 'function') setupStatCardEvents();
+}
+
+// Override save functions to use database
+async function saveKaryawanToDB(data) {
+    try {
+        const result = await window.db.saveKaryawan(data);
+        if (result) {
+            const index = karyawanData.findIndex(item => item.id === data.id);
+            if (index !== -1) {
+                karyawanData[index] = result;
+            } else {
+                karyawanData.push(result);
+            }
+            localStorage.setItem('hrpro_karyawan_data', JSON.stringify(karyawanData));
+            refreshAllUI();
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error saving karyawan:', error);
+        return false;
+    }
+}
+
+async function deleteKaryawanFromDB(id) {
+    try {
+        const result = await window.db.deleteKaryawan(id);
+        if (result) {
+            karyawanData = karyawanData.filter(item => item.id !== id);
+            localStorage.setItem('hrpro_karyawan_data', JSON.stringify(karyawanData));
+            refreshAllUI();
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error deleting karyawan:', error);
+        return false;
+    }
+}
+
+// Similar functions for other data types...
+
 // ========== MAIN INIT ==========
 (async function() {
   console.log('🚀 HATORI Group App starting...');

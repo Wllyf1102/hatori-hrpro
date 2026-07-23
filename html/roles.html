@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HATORI Group · Users</title>
+  <title>HATORI Group · Roles</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/styles-glass.css">
+<link rel="stylesheet" href="../css/styles-glass.css">
   <style>
     .nav-item.active-page {
       background: rgba(59, 130, 246, 0.15);
@@ -17,142 +17,6 @@
     }
     .nav-item.active-page i {
       color: #3b82f6;
-    }
-    /* Style untuk input readonly di modal */
-    #modalEditUser .form-group input[readonly] {
-      background: rgba(255,255,255,0.03) !important;
-      color: rgba(255,255,255,0.5) !important;
-      cursor: not-allowed !important;
-      border-color: rgba(255,255,255,0.05) !important;
-    }
-    #modalEditUser .form-group input[readonly]:focus {
-      box-shadow: none !important;
-      border-color: rgba(255,255,255,0.05) !important;
-    }
-
-    /* ===== PAGINATION STYLES ===== */
-    .table-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .table-controls .entries-control {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 13px;
-    }
-
-    .table-controls .entries-control select {
-      background: rgba(255, 255, 255, 0.05);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .table-controls .entries-control select option {
-      background: #1a1a2e;
-      color: white;
-    }
-
-    .table-controls .showing-info {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 13px;
-    }
-
-    .pagination-container {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 8px;
-      margin-top: 16px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .pagination-container .pagination-btn {
-      padding: 6px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.03);
-      color: rgba(255, 255, 255, 0.6);
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      transition: all 0.3s ease;
-    }
-
-    .pagination-container .pagination-btn:hover:not(:disabled) {
-      background: rgba(59, 130, 246, 0.15);
-      color: #ffffff;
-      border-color: rgba(59, 130, 246, 0.2);
-    }
-
-    .pagination-container .pagination-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-
-    .pagination-container .page-numbers {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .pagination-container .page-numbers .page-num {
-      padding: 6px 12px;
-      border: 1px solid transparent;
-      border-radius: 6px;
-      color: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      transition: all 0.3s ease;
-      min-width: 36px;
-      text-align: center;
-    }
-
-    .pagination-container .page-numbers .page-num:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.05);
-      color: #ffffff;
-    }
-
-    .pagination-container .page-numbers .page-num.active {
-      background: rgba(59, 130, 246, 0.2);
-      color: #ffffff;
-      border-color: rgba(59, 130, 246, 0.2);
-    }
-
-    .pagination-container .page-numbers .page-ellipsis {
-      color: rgba(255, 255, 255, 0.3);
-      padding: 6px 4px;
-      font-size: 13px;
-    }
-
-    @media (max-width: 600px) {
-      .table-controls {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .table-controls .entries-control {
-        justify-content: center;
-      }
-      .table-controls .showing-info {
-        text-align: center;
-      }
-      .pagination-container {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
     }
   </style>
 </head>
@@ -179,11 +43,11 @@
           
           const role = existing.role;
           const navItems = document.querySelectorAll('.nav-item');
-          const allowedMenus = {
-            'Superadmin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'roles', 'pengaturan', 'api-telegram'],
-            'Admin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'api-telegram'],
-            'User': ['dashboard', 'karyawan', 'izin']
-          };
+const allowedMenus = {
+  'Superadmin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'roles', 'pengaturan', 'api-telegram'],
+  'Admin': ['dashboard', 'karyawan', 'izin', 'laporan', 'users', 'api-telegram'],
+  'User': ['dashboard', 'karyawan', 'izin']
+};
           
           const allowed = allowedMenus[role] || allowedMenus['User'];
           
@@ -217,9 +81,9 @@
   <div class="app">
     <!-- SIDEBAR -->
     <aside class="sidebar glass">
-      <div class="logo-area">
-        <img src="https://hijau.b-cdn.net/png-hatorigrup.png" alt="HATORI Group Logo" style="height: 40px; width: auto;">
-      </div>
+<div class="logo-area">
+  <img src="https://hijau.b-cdn.net/png-hatorigrup.png" alt="Hatori Group Logo" style="height: 40px; width: auto;">
+</div>
       <nav class="nav-menu">
         <a href="dashboard.html" class="nav-item" data-page="dashboard">
           <i class="fas fa-chart-pie"></i> Dashboard
@@ -233,18 +97,18 @@
         <a href="laporan.html" class="nav-item" data-page="laporan">
           <i class="fas fa-chart-line"></i> Laporan Izin
         </a>
-        <a href="users.html" class="nav-item active-page" data-page="users">
+        <a href="users.html" class="nav-item" data-page="users">
           <i class="fas fa-users-cog"></i> Users
         </a>
-        <a href="roles.html" class="nav-item" data-page="roles">
+        <a href="roles.html" class="nav-item active-page" data-page="roles">
           <i class="fas fa-user-tag"></i> Roles
         </a>
-        <a href="pengaturan.html" class="nav-item" data-page="pengaturan">
-          <i class="fas fa-cog"></i> Pengaturan
-        </a>
-        <a href="api-telegram.html" class="nav-item" data-page="api-telegram">
-          <i class="fab fa-telegram-plane"></i> Api Telegram
-        </a>
+<a href="pengaturan.html" class="nav-item" data-page="pengaturan">
+  <i class="fas fa-cog"></i> Pengaturan
+</a>
+<a href="api-telegram.html" class="nav-item" data-page="api-telegram">
+  <i class="fab fa-telegram-plane"></i> Api Telegram
+</a>
       </nav>
       <div class="sidebar-footer">
         <div class="user-badge">
@@ -265,7 +129,7 @@
       <header class="topbar glass">
         <div class="search-wrapper">
           <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Cari user (email, nama, role, situs)..." />
+          <input type="text" id="searchInput" placeholder="Cari role..." />
         </div>
         <div class="topbar-actions">
           <span class="date-badge"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></span>
@@ -278,52 +142,27 @@
       <div id="pageContent">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
           <h2 style="font-weight: 600; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
-            <i class="fas fa-users-cog" style="color: #3b82f6;"></i> User Management
+            <i class="fas fa-user-tag" style="color: #3b82f6;"></i> Manajemen Roles
           </h2>
+          <button class="btn-add" id="btnTambahRole">
+            <i class="fas fa-plus"></i> Tambah Role
+          </button>
         </div>
-
         <div class="card glass">
-          <!-- Table Controls: Show Entries & Showing Info -->
-          <div class="table-controls">
-            <div class="entries-control">
-              <label>Show</label>
-              <select id="showEntriesUsers">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="500">500</option>
-              </select>
-              <label>entries</label>
-            </div>
-            <div class="showing-info" id="showingInfoUsers">Showing 0 - 0 of 0</div>
-          </div>
-
           <div class="table-responsive">
             <table>
               <thead>
                 <tr>
                   <th>No.</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Situs</th>
+                  <th>Role Name</th>
+                  <th>Menu Yang Diizinkan</th>
+                  <th>Permissions</th>
                   <th>Status</th>
-                  <th>Action</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
-              <tbody id="usersTableBody"></tbody>
+              <tbody id="rolesTableBody"></tbody>
             </table>
-          </div>
-
-          <!-- Pagination Controls -->
-          <div class="pagination-container" id="paginationContainerUsers">
-            <button class="pagination-btn" id="prevPageUsersBtn" disabled>
-              <i class="fas fa-chevron-left"></i> Previous
-            </button>
-            <div class="page-numbers" id="pageNumbersUsers"></div>
-            <button class="pagination-btn" id="nextPageUsersBtn">
-              Next <i class="fas fa-chevron-right"></i>
-            </button>
           </div>
         </div>
       </div>
@@ -628,32 +467,33 @@
         
         <div class="form-group">
           <label>Menu Yang Diizinkan <span class="required">*</span></label>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-              <input type="checkbox" class="menu-checkbox" value="dashboard"> Dashboard
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-              <input type="checkbox" class="menu-checkbox" value="karyawan"> Karyawan
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-              <input type="checkbox" class="menu-checkbox" value="izin"> Izin Staff
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-              <input type="checkbox" class="menu-checkbox" value="laporan"> Laporan Izin
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-              <input type="checkbox" class="menu-checkbox" value="users"> Users
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-              <input type="checkbox" class="menu-checkbox" value="pengaturan"> Pengaturan
-            </label>
-            <label style="display: flex; align-items; center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-              <input type="checkbox" class="menu-checkbox" value="api-telegram"> Api Telegram
-            </label>
-            <label style="display: flex; align-items; center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
-              <input type="checkbox" class="menu-checkbox" value="roles"> Roles
-            </label>
-          </div>
+<!-- Di dalam modal Role, tambahkan checkbox Api Telegram -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+        <input type="checkbox" class="menu-checkbox" value="dashboard"> Dashboard
+    </label>
+    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+        <input type="checkbox" class="menu-checkbox" value="karyawan"> Karyawan
+    </label>
+    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+        <input type="checkbox" class="menu-checkbox" value="izin"> Izin Staff
+    </label>
+    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+        <input type="checkbox" class="menu-checkbox" value="laporan"> Laporan Izin
+    </label>
+    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+        <input type="checkbox" class="menu-checkbox" value="users"> Users
+    </label>
+    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+        <input type="checkbox" class="menu-checkbox" value="pengaturan"> Pengaturan
+    </label>
+    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+        <input type="checkbox" class="menu-checkbox" value="api-telegram"> Api Telegram
+    </label>
+    <label style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;">
+        <input type="checkbox" class="menu-checkbox" value="roles"> Roles
+    </label>
+</div>
         </div>
         
         <div class="form-group">
@@ -689,60 +529,6 @@
     </div>
   </div>
 
-  <!-- ========== MODAL EDIT USER ========== -->
-  <div class="modal-overlay" id="modalEditUser">
-    <div class="modal-content glass" style="max-width: 450px;">
-      <div class="modal-header">
-        <h3><i class="fas fa-user-edit" style="color: #3b82f6;"></i> Edit User</h3>
-        <button class="modal-close" id="closeEditUserModal">&times;</button>
-      </div>
-      <form id="formEditUser">
-        <input type="hidden" id="editUserId" value="">
-        
-        <div class="form-group">
-          <label>Email <span class="required">*</span></label>
-          <input type="email" id="editUserEmail" placeholder="Email user" required readonly>
-        </div>
-        
-        <div class="form-group">
-          <label>Nama <span class="required">*</span></label>
-          <input type="text" id="editUserName" placeholder="Nama lengkap" required>
-        </div>
-        
-        <div class="form-group">
-          <label>Role <span class="required">*</span></label>
-          <select id="editUserRole" required>
-            <option value="Superadmin">Superadmin</option>
-            <option value="Admin">Admin</option>
-            <option value="User">User</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label>Situs <span class="required">*</span></label>
-          <select id="editUserSitus" required>
-            <!-- Akan diisi dinamis oleh JavaScript -->
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label>Status <span class="required">*</span></label>
-          <select id="editUserStatus" required>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn-cancel" id="cancelEditUserBtn">Batal</button>
-          <button type="submit" class="btn-submit">
-            <i class="fas fa-save"></i> Simpan Perubahan
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <!-- LOGOUT SCRIPT -->
   <script>
     function doLogout() {
@@ -767,9 +553,8 @@
     })();
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="../js/db.js"></script>
-  <script src="../js/dashboard.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../js/dashboard.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Update current date
@@ -777,250 +562,10 @@
       const options = { day: 'numeric', month: 'short', year: 'numeric' };
       const dateEl = document.getElementById('currentDate');
       if (dateEl) dateEl.textContent = now.toLocaleDateString('id-ID', options);
-
-      // ===== VARIABLES PAGINATION =====
-      let currentPageUsers = 1;
-      let entriesPerPageUsers = 10;
-      let filteredDataUsers = [];
-
-      // ===== FUNGSI RENDER USERS DENGAN PAGINATION =====
-      function renderUsersWithPagination() {
-        var tbody = document.getElementById('usersTableBody');
-        if (!tbody) return;
-        
-        // Gunakan filteredDataUsers jika sudah ada filter,否则 gunakan usersData
-        var dataToRender = filteredDataUsers.length > 0 ? filteredDataUsers : usersData;
-        
-        var totalData = dataToRender.length;
-        var totalPages = Math.ceil(totalData / entriesPerPageUsers);
-        
-        if (currentPageUsers > totalPages) currentPageUsers = totalPages;
-        if (currentPageUsers < 1) currentPageUsers = 1;
-        if (totalPages === 0) currentPageUsers = 1;
-        
-        var startIndex = (currentPageUsers - 1) * entriesPerPageUsers;
-        var endIndex = Math.min(startIndex + entriesPerPageUsers, totalData);
-        var pageData = dataToRender.slice(startIndex, endIndex);
-        
-        // Update showing info
-        var showingInfo = document.getElementById('showingInfoUsers');
-        if (showingInfo) {
-          if (totalData === 0) {
-            showingInfo.textContent = 'Showing 0 - 0 of 0';
-          } else {
-            showingInfo.textContent = 'Showing ' + (startIndex + 1) + ' - ' + endIndex + ' of ' + totalData;
-          }
-        }
-        
-        tbody.innerHTML = '';
-        
-        if (pageData.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.4);">' +
-            '<i class="fas fa-users" style="font-size: 24px; display: block; margin-bottom: 8px;"></i>' +
-            'Belum ada user. Silakan lakukan pendaftaran.' +
-          '</td></tr>';
-        } else {
-          pageData.forEach(function(item, index) {
-            var tr = document.createElement('tr');
-            var statusClass = item.status === 'Active' ? 'hadir' : 'izin';
-            var statusColor = item.status === 'Active' ? '#4ade80' : '#facc15';
-            
-            tr.innerHTML =
-              '<td>' + (startIndex + index + 1) + '</td>' +
-              '<td><strong>' + item.email + '</strong></td>' +
-              '<td><span class="status-badge" style="background: rgba(59,130,246,0.2); color: #93c5fd;">' + item.role + '</span></td>' +
-              '<td>' + item.situs + '</td>' +
-              '<td><span class="status-badge ' + statusClass + '" style="color: ' + statusColor + ';">' + item.status + '</span></td>' +
-              '<td><button class="btn-action edit" onclick="editUser(' + item.id + ')" title="Edit User"><i class="fas fa-edit"></i></button>' +
-              '<button class="btn-action delete" onclick="deleteUser(' + item.id + ')" title="Hapus User"><i class="fas fa-trash"></i></button></td>';
-            tbody.appendChild(tr);
-          });
-        }
-        
-        // Render pagination
-        renderPaginationUsers(totalPages);
-      }
-
-      // ===== FUNGSI RENDER PAGINATION USERS =====
-      function renderPaginationUsers(totalPages) {
-        var pageNumbers = document.getElementById('pageNumbersUsers');
-        var prevBtn = document.getElementById('prevPageUsersBtn');
-        var nextBtn = document.getElementById('nextPageUsersBtn');
-        
-        if (!pageNumbers) return;
-        pageNumbers.innerHTML = '';
-        
-        if (totalPages <= 1) {
-          prevBtn.disabled = true;
-          nextBtn.disabled = true;
-          return;
-        }
-        
-        prevBtn.disabled = (currentPageUsers === 1);
-        nextBtn.disabled = (currentPageUsers === totalPages);
-        
-        var maxVisible = 5;
-        var startPage = Math.max(1, currentPageUsers - Math.floor(maxVisible / 2));
-        var endPage = Math.min(totalPages, startPage + maxVisible - 1);
-        
-        if (endPage - startPage + 1 < maxVisible) {
-          startPage = Math.max(1, endPage - maxVisible + 1);
-        }
-        
-        if (startPage > 1) {
-          var firstBtn = document.createElement('span');
-          firstBtn.className = 'page-num';
-          firstBtn.textContent = '1';
-          firstBtn.dataset.page = 1;
-          firstBtn.addEventListener('click', function() {
-            goToPageUsers(parseInt(this.dataset.page));
-          });
-          pageNumbers.appendChild(firstBtn);
-          
-          if (startPage > 2) {
-            var ellipsis = document.createElement('span');
-            ellipsis.className = 'page-ellipsis';
-            ellipsis.textContent = '…';
-            pageNumbers.appendChild(ellipsis);
-          }
-        }
-        
-        for (var i = startPage; i <= endPage; i++) {
-          var pageBtn = document.createElement('span');
-          pageBtn.className = 'page-num' + (i === currentPageUsers ? ' active' : '');
-          pageBtn.textContent = i;
-          pageBtn.dataset.page = i;
-          pageBtn.addEventListener('click', function() {
-            goToPageUsers(parseInt(this.dataset.page));
-          });
-          pageNumbers.appendChild(pageBtn);
-        }
-        
-        if (endPage < totalPages) {
-          if (endPage < totalPages - 1) {
-            var ellipsis2 = document.createElement('span');
-            ellipsis2.className = 'page-ellipsis';
-            ellipsis2.textContent = '…';
-            pageNumbers.appendChild(ellipsis2);
-          }
-          
-          var lastBtn = document.createElement('span');
-          lastBtn.className = 'page-num';
-          lastBtn.textContent = totalPages;
-          lastBtn.dataset.page = totalPages;
-          lastBtn.addEventListener('click', function() {
-            goToPageUsers(parseInt(this.dataset.page));
-          });
-          pageNumbers.appendChild(lastBtn);
-        }
-      }
-
-      // ===== FUNGSI GO TO PAGE USERS =====
-      function goToPageUsers(page) {
-        var dataToRender = filteredDataUsers.length > 0 ? filteredDataUsers : usersData;
-        var totalPages = Math.ceil(dataToRender.length / entriesPerPageUsers);
-        if (page < 1 || page > totalPages) return;
-        currentPageUsers = page;
-        renderUsersWithPagination();
-      }
-
-      // ===== EVENT PAGINATION BUTTONS =====
-      document.getElementById('prevPageUsersBtn')?.addEventListener('click', function() {
-        if (currentPageUsers > 1) {
-          goToPageUsers(currentPageUsers - 1);
-        }
-      });
-
-      document.getElementById('nextPageUsersBtn')?.addEventListener('click', function() {
-        var dataToRender = filteredDataUsers.length > 0 ? filteredDataUsers : usersData;
-        var totalPages = Math.ceil(dataToRender.length / entriesPerPageUsers);
-        if (currentPageUsers < totalPages) {
-          goToPageUsers(currentPageUsers + 1);
-        }
-      });
-
-      // ===== EVENT SHOW ENTRIES =====
-      document.getElementById('showEntriesUsers')?.addEventListener('change', function() {
-        entriesPerPageUsers = parseInt(this.value);
-        currentPageUsers = 1;
-        renderUsersWithPagination();
-      });
-
-      // ===== OVERRIDE FUNGSI RENDER USERS =====
-      window.renderUsers = function() {
-        renderUsersWithPagination();
-      };
-
-      // ===== FUNGSI PENCARIAN =====
-      const searchInput = document.getElementById('searchInput');
-      if (searchInput) {
-        const newSearchInput = searchInput.cloneNode(true);
-        searchInput.parentNode.replaceChild(newSearchInput, searchInput);
-        
-        newSearchInput.addEventListener('keyup', function() {
-          const searchTerm = this.value.trim().toLowerCase();
-          
-          if (searchTerm === '') {
-            filteredDataUsers = [];
-          } else {
-            filteredDataUsers = usersData.filter(function(item) {
-              return item.email.toLowerCase().includes(searchTerm) ||
-                     item.name.toLowerCase().includes(searchTerm) ||
-                     item.role.toLowerCase().includes(searchTerm) ||
-                     item.situs.toLowerCase().includes(searchTerm);
-            });
-          }
-          
-          currentPageUsers = 1;
-          renderUsersWithPagination();
-        });
-      }
-
-      // ===== OVERRIDE FUNGSI DELETE USER =====
-      var originalDeleteUser = window.deleteUser;
-      window.deleteUser = async function(id) {
-        var user = usersData.find(function(item) { return item.id === id; });
-        if (!user) return;
-        
-        if (user.role === 'Superadmin') {
-          alert('⚠️ Tidak dapat menghapus Superadmin!');
-          return;
-        }
-        
-        if (confirm('Apakah Anda yakin ingin menghapus user "' + user.email + '"?')) {
-          usersData = usersData.filter(function(item) { return item.id !== id; });
-          
-          if (window.db && typeof window.db.deleteUser === 'function') {
-            try {
-              await window.db.deleteUser(id);
-              console.log('✅ User deleted from database:', id);
-            } catch(e) {
-              console.error('Error deleting user:', e);
-            }
-          }
-          
-          // Simpan ke localStorage
-          localStorage.setItem('hrpro_users', JSON.stringify(usersData));
-          
-          // Reset filter
-          filteredDataUsers = [];
-          const searchInput = document.getElementById('searchInput');
-          if (searchInput) searchInput.value = '';
-          
-          renderUsersWithPagination();
-          alert('✅ User berhasil dihapus!');
-        }
-      };
-
-      // ===== SETUP EVENTS =====
-      setupUsersEvents();
-      setupEditUserEvents();
       
-      // ===== RENDER =====
-      renderUsersWithPagination();
-      
-      console.log('👥 Users page loaded with pagination and search');
-      console.log('🔍 Pencarian user aktif: mencari di email, nama, role, dan situs');
+      // Render roles
+      renderRoles();
+      setupRolesEvents();
     });
   </script>
 </body>

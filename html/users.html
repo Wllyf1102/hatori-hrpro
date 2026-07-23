@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HATORI Group · Laporan Izin</title>
+  <title>HATORI Group · Users</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,41 +18,16 @@
     .nav-item.active-page i {
       color: #3b82f6;
     }
-    .btn-export {
-      background: rgba(22, 163, 74, 0.2);
-      border-color: rgba(22, 163, 74, 0.2);
+    /* Style untuk input readonly di modal */
+    #modalEditUser .form-group input[readonly] {
+      background: rgba(255,255,255,0.03) !important;
+      color: rgba(255,255,255,0.5) !important;
+      cursor: not-allowed !important;
+      border-color: rgba(255,255,255,0.05) !important;
     }
-    .btn-export:hover {
-      background: rgba(22, 163, 74, 0.4);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(22, 163, 74, 0.15);
-    }
-    .btn-group {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-    .btn-group .btn-add {
-      padding: 8px 14px;
-      font-size: 12px;
-      border-radius: 10px;
-    }
-    .btn-group .btn-add i {
-      font-size: 13px;
-    }
-    .btn-group .btn-add:hover {
-      transform: translateY(-2px);
-    }
-    @media (max-width: 600px) {
-      .btn-group {
-        width: 100%;
-      }
-      .btn-group .btn-add {
-        flex: 1;
-        justify-content: center;
-        padding: 10px 12px;
-        font-size: 13px;
-      }
+    #modalEditUser .form-group input[readonly]:focus {
+      box-shadow: none !important;
+      border-color: rgba(255,255,255,0.05) !important;
     }
 
     /* ===== PAGINATION STYLES ===== */
@@ -255,10 +230,10 @@ const allowedMenus = {
         <a href="izin.html" class="nav-item" data-page="izin">
           <i class="fas fa-file-alt"></i> Izin Staff
         </a>
-        <a href="laporan.html" class="nav-item active-page" data-page="laporan">
+        <a href="laporan.html" class="nav-item" data-page="laporan">
           <i class="fas fa-chart-line"></i> Laporan Izin
         </a>
-        <a href="users.html" class="nav-item" data-page="users">
+        <a href="users.html" class="nav-item active-page" data-page="users">
           <i class="fas fa-users-cog"></i> Users
         </a>
         <a href="roles.html" class="nav-item" data-page="roles">
@@ -290,7 +265,7 @@ const allowedMenus = {
       <header class="topbar glass">
         <div class="search-wrapper">
           <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Cari laporan..." />
+          <input type="text" id="searchInput" placeholder="Cari user..." />
         </div>
         <div class="topbar-actions">
           <span class="date-badge"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></span>
@@ -303,64 +278,16 @@ const allowedMenus = {
       <div id="pageContent">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
           <h2 style="font-weight: 600; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
-            <i class="fas fa-chart-line" style="color: #3b82f6;"></i> Laporan Izin
+            <i class="fas fa-users-cog" style="color: #3b82f6;"></i> User Management
           </h2>
-          <div class="btn-group">
-            <button class="btn-add btn-export" id="btnExportLaporanCSV">
-              <i class="fas fa-file-excel"></i> Export CSV
-            </button>
-          </div>
-        </div>
-
-        <div class="card glass" style="margin-bottom: 20px;">
-          <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;">
-            <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
-              <label style="color: rgba(255,255,255,0.7); font-size: 13px; display: block; margin-bottom: 4px;">
-                <i class="fas fa-calendar-alt" style="margin-right: 4px;"></i> Period
-              </label>
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <button class="btn-datepicker" id="btnDatePicker" style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 9px 16px; cursor: pointer; font-family: 'Inter', sans-serif; flex: 1; text-align: left; display: flex; align-items: center; gap: 8px;">
-                  <i class="fas fa-calendar-day"></i>
-                  <span id="selectedPeriodText">Pilih Periode</span>
-                  <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px; opacity: 0.5;"></i>
-                </button>
-              </div>
-            </div>
-            
-            <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 150px;">
-              <label style="color: rgba(255,255,255,0.7); font-size: 13px; display: block; margin-bottom: 4px;">
-                <i class="fas fa-user" style="margin-right: 4px;"></i> Nama Staff
-              </label>
-              <input type="text" id="filterNamaStaff" placeholder="Semua staff..." style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 9px 14px; width: 100%; font-family: 'Inter', sans-serif;">
-            </div>
-            
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn-add" id="btnFilterLaporan" style="margin-bottom: 2px;">
-                <i class="fas fa-search"></i> Tampilkan
-              </button>
-              <button class="btn-add" id="btnResetFilter" style="margin-bottom: 2px; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.1);">
-                <i class="fas fa-undo"></i> Reset
-              </button>
-            </div>
-          </div>
-          
-          <input type="hidden" id="filterTglMulai" value="">
-          <input type="hidden" id="filterTglAkhir" value="">
-          
-          <div id="tanggalInfo" style="margin-top: 12px; padding: 8px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); display: none;">
-            <span style="color: rgba(255,255,255,0.5); font-size: 13px;">
-              <i class="fas fa-clock"></i> 
-              <span id="tanggalInfoText">Menampilkan data dari tanggal ...</span>
-            </span>
-          </div>
         </div>
 
         <div class="card glass">
-          <!-- Table Controls: Show Entries & Showing Info - DI ATAS TABEL -->
+          <!-- Table Controls: Show Entries & Showing Info -->
           <div class="table-controls">
             <div class="entries-control">
               <label>Show</label>
-              <select id="showEntriesLaporan">
+              <select id="showEntriesUsers">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -369,33 +296,32 @@ const allowedMenus = {
               </select>
               <label>entries</label>
             </div>
-            <div class="showing-info" id="showingInfoLaporan">Showing 0 - 0 of 0</div>
+            <div class="showing-info" id="showingInfoUsers">Showing 0 - 0 of 0</div>
           </div>
 
           <div class="table-responsive">
             <table>
               <thead>
                 <tr>
-                  <th>Tanggal</th>
-                  <th>Nama</th>
+                  <th>No.</th>
+                  <th>Email</th>
+                  <th>Role</th>
                   <th>Situs</th>
-                  <th>Posisi</th>
-                  <th>Total Durasi Izin</th>
-                  <th>Total Pemotongan Bonus</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody id="laporanTableBody"></tbody>
+              <tbody id="usersTableBody"></tbody>
             </table>
           </div>
 
-          <!-- Pagination Controls - DI BAWAH TABEL -->
-          <div class="pagination-container" id="paginationContainerLaporan">
-            <button class="pagination-btn" id="prevPageLaporanBtn" disabled>
+          <!-- Pagination Controls -->
+          <div class="pagination-container" id="paginationContainerUsers">
+            <button class="pagination-btn" id="prevPageUsersBtn" disabled>
               <i class="fas fa-chevron-left"></i> Previous
             </button>
-            <div class="page-numbers" id="pageNumbersLaporan"></div>
-            <button class="pagination-btn" id="nextPageLaporanBtn">
+            <div class="page-numbers" id="pageNumbersUsers"></div>
+            <button class="pagination-btn" id="nextPageUsersBtn">
               Next <i class="fas fa-chevron-right"></i>
             </button>
           </div>
@@ -442,9 +368,15 @@ const allowedMenus = {
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Situs <span class="required">*</span></label>
+            <label>Divisi <span class="required">*</span></label>
             <select id="inputDivisi" required>
-              <option value="">Pilih Situs</option>
+              <option value="">Pilih Divisi</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Finance">Finance</option>
+              <option value="HR">HR</option>
+              <option value="Design">Design</option>
+              <option value="Operations">Operations</option>
             </select>
           </div>
           <div class="form-group">
@@ -529,6 +461,11 @@ const allowedMenus = {
           <label>Keterangan Izin <span class="required">*</span></label>
           <select id="inputKeteranganIzin" required>
             <option value="">Pilih Keterangan</option>
+            <option value="Merokok">🚬 Merokok</option>
+            <option value="BAB">🚽 BAB</option>
+            <option value="Kencin">☕ Kencin (Kopi)</option>
+            <option value="Ambil Makan">🍚 Ambil Makan</option>
+            <option value="Ambil Kopi">☕ Ambil Kopi</option>
           </select>
         </div>
         <div class="modal-footer">
@@ -753,6 +690,60 @@ const allowedMenus = {
     </div>
   </div>
 
+  <!-- ========== MODAL EDIT USER ========== -->
+  <div class="modal-overlay" id="modalEditUser">
+    <div class="modal-content glass" style="max-width: 450px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-user-edit" style="color: #3b82f6;"></i> Edit User</h3>
+        <button class="modal-close" id="closeEditUserModal">&times;</button>
+      </div>
+      <form id="formEditUser">
+        <input type="hidden" id="editUserId" value="">
+        
+        <div class="form-group">
+          <label>Email <span class="required">*</span></label>
+          <input type="email" id="editUserEmail" placeholder="Email user" required readonly>
+        </div>
+        
+        <div class="form-group">
+          <label>Nama <span class="required">*</span></label>
+          <input type="text" id="editUserName" placeholder="Nama lengkap" required>
+        </div>
+        
+        <div class="form-group">
+          <label>Role <span class="required">*</span></label>
+          <select id="editUserRole" required>
+            <option value="Superadmin">Superadmin</option>
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Situs <span class="required">*</span></label>
+          <select id="editUserSitus" required>
+            <!-- Akan diisi dinamis oleh JavaScript -->
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Status <span class="required">*</span></label>
+          <select id="editUserStatus" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelEditUserBtn">Batal</button>
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-save"></i> Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- LOGOUT SCRIPT -->
   <script>
     function doLogout() {
@@ -778,7 +769,6 @@ const allowedMenus = {
   </script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../js/db.js"></script>
 <script src="../js/dashboard.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -789,55 +779,30 @@ const allowedMenus = {
       if (dateEl) dateEl.textContent = now.toLocaleDateString('id-ID', options);
 
       // ===== VARIABLES PAGINATION =====
-      let currentPageLaporan = 1;
-      let entriesPerPageLaporan = 10;
-      let filteredDataLaporan = [];
+      let currentPageUsers = 1;
+      let entriesPerPageUsers = 10;
+      let filteredDataUsers = [];
 
-      // ===== FUNGSI RENDER LAPORAN DENGAN PAGINATION =====
-      function renderLaporanWithPagination(tglMulai, tglAkhir, namaStaff) {
-        var tbody = document.getElementById('laporanTableBody');
+      // ===== FUNGSI RENDER USERS DENGAN PAGINATION =====
+      function renderUsersWithPagination() {
+        var tbody = document.getElementById('usersTableBody');
         if (!tbody) return;
         
-        var tanggalInfo = document.getElementById('tanggalInfo');
-        var tanggalInfoText = document.getElementById('tanggalInfoText');
+        filteredDataUsers = usersData;
         
-        if (tglMulai && tglAkhir) {
-          if (tanggalInfo) tanggalInfo.style.display = 'block';
-          if (tanggalInfoText) {
-            tanggalInfoText.textContent = 'Menampilkan data dari ' + formatDate(tglMulai) + ' sampai ' + formatDate(tglAkhir);
-          }
-        } else {
-          if (tanggalInfo) tanggalInfo.style.display = 'none';
-        }
+        var totalData = filteredDataUsers.length;
+        var totalPages = Math.ceil(totalData / entriesPerPageUsers);
         
-        if (!tglMulai || !tglAkhir) {
-          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.4);">' +
-            '<i class="fas fa-calendar" style="font-size: 24px; display: block; margin-bottom: 8px;"></i>' +
-            'Silakan pilih rentang tanggal dan klik "Tampilkan"' +
-          '</td></tr>';
-          document.getElementById('showingInfoLaporan').textContent = 'Showing 0 - 0 of 0';
-          document.getElementById('pageNumbersLaporan').innerHTML = '';
-          document.getElementById('prevPageLaporanBtn').disabled = true;
-          document.getElementById('nextPageLaporanBtn').disabled = true;
-          return;
-        }
+        if (currentPageUsers > totalPages) currentPageUsers = totalPages;
+        if (currentPageUsers < 1) currentPageUsers = 1;
+        if (totalPages === 0) currentPageUsers = 1;
         
-        var data = getLaporanData(tglMulai, tglAkhir, namaStaff);
-        filteredDataLaporan = data;
-        
-        var totalData = filteredDataLaporan.length;
-        var totalPages = Math.ceil(totalData / entriesPerPageLaporan);
-        
-        if (currentPageLaporan > totalPages) currentPageLaporan = totalPages;
-        if (currentPageLaporan < 1) currentPageLaporan = 1;
-        if (totalPages === 0) currentPageLaporan = 1;
-        
-        var startIndex = (currentPageLaporan - 1) * entriesPerPageLaporan;
-        var endIndex = Math.min(startIndex + entriesPerPageLaporan, totalData);
-        var pageData = filteredDataLaporan.slice(startIndex, endIndex);
+        var startIndex = (currentPageUsers - 1) * entriesPerPageUsers;
+        var endIndex = Math.min(startIndex + entriesPerPageUsers, totalData);
+        var pageData = filteredDataUsers.slice(startIndex, endIndex);
         
         // Update showing info
-        var showingInfo = document.getElementById('showingInfoLaporan');
+        var showingInfo = document.getElementById('showingInfoUsers');
         if (showingInfo) {
           if (totalData === 0) {
             showingInfo.textContent = 'Showing 0 - 0 of 0';
@@ -849,66 +814,37 @@ const allowedMenus = {
         tbody.innerHTML = '';
         
         if (pageData.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.4);">' +
-            '<i class="fas fa-check-circle" style="font-size: 24px; display: block; margin-bottom: 8px; color: #4ade80;"></i>' +
-            'Tidak ada staff yang melebihi batas izin (' + getKuotaIzinPerHari() + ' menit) pada periode ini' +
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.4);">' +
+            '<i class="fas fa-users" style="font-size: 24px; display: block; margin-bottom: 8px;"></i>' +
+            'Belum ada user. Silakan lakukan pendaftaran.' +
           '</td></tr>';
         } else {
-          pageData.forEach(function(item) {
+          pageData.forEach(function(item, index) {
             var tr = document.createElement('tr');
-            var hasil = getPemotonganBonus(item.totalDurasi);
-            var durasiFormat = formatDurasi(item.totalDurasi);
-            
-            var statusClass = 'izin';
-            var bonusText = '';
-            var bonusColor = '';
-            
-            if (hasil.status === 'Normal') {
-              statusClass = 'hadir';
-              bonusText = '0%';
-              bonusColor = '#4ade80';
-            } else if (hasil.status === 'Peringatan 10%') {
-              statusClass = 'terlambat';
-              bonusText = '10%';
-              bonusColor = '#fb923c';
-            } else if (hasil.status === 'Peringatan 20%') {
-              statusClass = 'terlambat';
-              bonusText = '20%';
-              bonusColor = '#f97316';
-            } else if (hasil.status === 'Peringatan 30%') {
-              statusClass = 'izin-keluar';
-              bonusText = '30%';
-              bonusColor = '#ef4444';
-            } else if (hasil.status === 'PEMECATAN') {
-              statusClass = 'alpha';
-              bonusText = '⚠️ PEMECATAN!';
-              bonusColor = '#dc2626';
-            }
-            
-            var dateObj = new Date(item.date);
-            var formattedDate = dateObj.getDate() + ' ' + dateObj.toLocaleString('id-ID', { month: 'short' }) + ' ' + dateObj.getFullYear();
+            var statusClass = item.status === 'Active' ? 'hadir' : 'izin';
+            var statusColor = item.status === 'Active' ? '#4ade80' : '#facc15';
             
             tr.innerHTML =
-              '<td><strong>' + formattedDate + '</strong></td>' +
-              '<td><strong>' + item.name + '</strong></td>' +
-              '<td>' + item.division + '</td>' +
-              '<td>' + item.position + '</td>' +
-              '<td><span class="status-badge izin">' + durasiFormat + '</span></td>' +
-              '<td><span class="status-badge ' + statusClass + '" style="color: ' + bonusColor + '; font-weight: 600;">' + bonusText + '</span></td>' +
-              '<td><button class="btn-action edit" onclick="openRiwayatIzin(\'' + item.name + '\')" title="Lihat Riwayat"><i class="fas fa-history"></i> Riwayat</button></td>';
+              '<td>' + (startIndex + index + 1) + '</td>' +
+              '<td><strong>' + item.email + '</strong></td>' +
+              '<td><span class="status-badge" style="background: rgba(59,130,246,0.2); color: #93c5fd;">' + item.role + '</span></td>' +
+              '<td>' + item.situs + '</td>' +
+              '<td><span class="status-badge ' + statusClass + '" style="color: ' + statusColor + ';">' + item.status + '</span></td>' +
+              '<td><button class="btn-action edit" onclick="editUser(' + item.id + ')" title="Edit User"><i class="fas fa-edit"></i></button>' +
+              '<button class="btn-action delete" onclick="deleteUser(' + item.id + ')" title="Hapus User"><i class="fas fa-trash"></i></button></td>';
             tbody.appendChild(tr);
           });
         }
         
         // Render pagination
-        renderPaginationLaporan(totalPages);
+        renderPaginationUsers(totalPages);
       }
 
-      // ===== FUNGSI RENDER PAGINATION LAPORAN =====
-      function renderPaginationLaporan(totalPages) {
-        var pageNumbers = document.getElementById('pageNumbersLaporan');
-        var prevBtn = document.getElementById('prevPageLaporanBtn');
-        var nextBtn = document.getElementById('nextPageLaporanBtn');
+      // ===== FUNGSI RENDER PAGINATION USERS =====
+      function renderPaginationUsers(totalPages) {
+        var pageNumbers = document.getElementById('pageNumbersUsers');
+        var prevBtn = document.getElementById('prevPageUsersBtn');
+        var nextBtn = document.getElementById('nextPageUsersBtn');
         
         if (!pageNumbers) return;
         pageNumbers.innerHTML = '';
@@ -919,11 +855,11 @@ const allowedMenus = {
           return;
         }
         
-        prevBtn.disabled = (currentPageLaporan === 1);
-        nextBtn.disabled = (currentPageLaporan === totalPages);
+        prevBtn.disabled = (currentPageUsers === 1);
+        nextBtn.disabled = (currentPageUsers === totalPages);
         
         var maxVisible = 5;
-        var startPage = Math.max(1, currentPageLaporan - Math.floor(maxVisible / 2));
+        var startPage = Math.max(1, currentPageUsers - Math.floor(maxVisible / 2));
         var endPage = Math.min(totalPages, startPage + maxVisible - 1);
         
         if (endPage - startPage + 1 < maxVisible) {
@@ -936,7 +872,7 @@ const allowedMenus = {
           firstBtn.textContent = '1';
           firstBtn.dataset.page = 1;
           firstBtn.addEventListener('click', function() {
-            goToPageLaporan(parseInt(this.dataset.page));
+            goToPageUsers(parseInt(this.dataset.page));
           });
           pageNumbers.appendChild(firstBtn);
           
@@ -950,11 +886,11 @@ const allowedMenus = {
         
         for (var i = startPage; i <= endPage; i++) {
           var pageBtn = document.createElement('span');
-          pageBtn.className = 'page-num' + (i === currentPageLaporan ? ' active' : '');
+          pageBtn.className = 'page-num' + (i === currentPageUsers ? ' active' : '');
           pageBtn.textContent = i;
           pageBtn.dataset.page = i;
           pageBtn.addEventListener('click', function() {
-            goToPageLaporan(parseInt(this.dataset.page));
+            goToPageUsers(parseInt(this.dataset.page));
           });
           pageNumbers.appendChild(pageBtn);
         }
@@ -972,100 +908,119 @@ const allowedMenus = {
           lastBtn.textContent = totalPages;
           lastBtn.dataset.page = totalPages;
           lastBtn.addEventListener('click', function() {
-            goToPageLaporan(parseInt(this.dataset.page));
+            goToPageUsers(parseInt(this.dataset.page));
           });
           pageNumbers.appendChild(lastBtn);
         }
       }
 
-      // ===== FUNGSI GO TO PAGE LAPORAN =====
-      function goToPageLaporan(page) {
-        var totalPages = Math.ceil(filteredDataLaporan.length / entriesPerPageLaporan);
+      // ===== FUNGSI GO TO PAGE USERS =====
+      function goToPageUsers(page) {
+        var totalPages = Math.ceil(filteredDataUsers.length / entriesPerPageUsers);
         if (page < 1 || page > totalPages) return;
-        currentPageLaporan = page;
-        
-        var tglMulai = document.getElementById('filterTglMulai').value;
-        var tglAkhir = document.getElementById('filterTglAkhir').value;
-        var namaStaff = document.getElementById('filterNamaStaff').value.trim() || '';
-        renderLaporanWithPagination(tglMulai, tglAkhir, namaStaff);
+        currentPageUsers = page;
+        renderUsersWithPagination();
       }
 
       // ===== EVENT PAGINATION BUTTONS =====
-      document.getElementById('prevPageLaporanBtn')?.addEventListener('click', function() {
-        if (currentPageLaporan > 1) {
-          goToPageLaporan(currentPageLaporan - 1);
+      document.getElementById('prevPageUsersBtn')?.addEventListener('click', function() {
+        if (currentPageUsers > 1) {
+          goToPageUsers(currentPageUsers - 1);
         }
       });
 
-      document.getElementById('nextPageLaporanBtn')?.addEventListener('click', function() {
-        var totalPages = Math.ceil(filteredDataLaporan.length / entriesPerPageLaporan);
-        if (currentPageLaporan < totalPages) {
-          goToPageLaporan(currentPageLaporan + 1);
+      document.getElementById('nextPageUsersBtn')?.addEventListener('click', function() {
+        var totalPages = Math.ceil(filteredDataUsers.length / entriesPerPageUsers);
+        if (currentPageUsers < totalPages) {
+          goToPageUsers(currentPageUsers + 1);
         }
       });
 
       // ===== EVENT SHOW ENTRIES =====
-      document.getElementById('showEntriesLaporan')?.addEventListener('change', function() {
-        entriesPerPageLaporan = parseInt(this.value);
-        currentPageLaporan = 1;
-        
-        var tglMulai = document.getElementById('filterTglMulai').value;
-        var tglAkhir = document.getElementById('filterTglAkhir').value;
-        var namaStaff = document.getElementById('filterNamaStaff').value.trim() || '';
-        renderLaporanWithPagination(tglMulai, tglAkhir, namaStaff);
+      document.getElementById('showEntriesUsers')?.addEventListener('change', function() {
+        entriesPerPageUsers = parseInt(this.value);
+        currentPageUsers = 1;
+        renderUsersWithPagination();
       });
 
-      // ===== OVERRIDE FUNGSI RENDER LAPORAN =====
-      window.renderLaporan = function(tglMulai, tglAkhir, namaStaff) {
-        currentPageLaporan = 1;
-        renderLaporanWithPagination(tglMulai, tglAkhir, namaStaff || '');
+      // ===== OVERRIDE FUNGSI RENDER USERS =====
+      window.renderUsers = function() {
+        renderUsersWithPagination();
       };
 
-      // ===== SET DEFAULT TANGGAL =====
-      var today = getTodayDate();
-      var lastMonth = new Date();
-      lastMonth.setDate(lastMonth.getDate() - 30);
-      var tglMulai = lastMonth.toISOString().split('T')[0];
-      
-      document.getElementById('filterTglMulai').value = tglMulai;
-      document.getElementById('filterTglAkhir').value = today;
-      document.getElementById('selectedPeriodText').textContent = formatDate(tglMulai) + ' - ' + formatDate(today);
-      
-      renderLaporanWithPagination(tglMulai, today, '');
-      setupLaporanEvents();
-      
-      // Tambahkan di bagian script laporan.html setelah renderLaporanWithPagination()
+      // ===== OVERRIDE FUNGSI EDIT USER =====
+      var originalEditUser = window.editUser;
+      window.editUser = function(id) {
+        openEditUserModal(id);
+      };
 
-// ===== FUNGSI PENCARIAN LAPORAN =====
+      // ===== OVERRIDE FUNGSI DELETE USER =====
+      var originalDeleteUser = window.deleteUser;
+      window.deleteUser = async function(id) {
+        var user = usersData.find(function(item) { return item.id === id; });
+        if (!user) return;
+        
+        if (user.role === 'Superadmin') {
+          alert('⚠️ Tidak dapat menghapus Superadmin!');
+          return;
+        }
+        
+        if (confirm('Apakah Anda yakin ingin menghapus user "' + user.email + '"?')) {
+          usersData = usersData.filter(function(item) { return item.id !== id; });
+          
+          if (isElectron) {
+            try {
+              console.log('⚠️ Delete user from database need to be implemented');
+            } catch(e) {
+              console.error('Error deleting user:', e);
+            }
+          } else {
+            saveUsersData();
+          }
+          
+          renderUsersWithPagination();
+          alert('✅ User berhasil dihapus!');
+        }
+      };
+
+      // Tambahkan di bagian script users.html setelah renderUsersWithPagination()
+
+// ===== FUNGSI PENCARIAN USERS =====
 document.getElementById('searchInput')?.addEventListener('keyup', function() {
-    const searchTerm = this.value.trim();
-    // Update input filterNamaStaff dengan nilai pencarian
-    const filterNamaStaff = document.getElementById('filterNamaStaff');
-    if (filterNamaStaff) {
-        filterNamaStaff.value = searchTerm;
+    const searchTerm = this.value.trim().toLowerCase();
+    
+    if (searchTerm === '') {
+        filteredDataUsers = usersData;
+    } else {
+        filteredDataUsers = usersData.filter(function(item) {
+            return item.email.toLowerCase().includes(searchTerm) ||
+                   item.name.toLowerCase().includes(searchTerm) ||
+                   item.role.toLowerCase().includes(searchTerm) ||
+                   item.situs.toLowerCase().includes(searchTerm);
+        });
     }
     
-    // Trigger filter laporan
-    const tglMulai = document.getElementById('filterTglMulai').value;
-    const tglAkhir = document.getElementById('filterTglAkhir').value;
+    currentPageUsers = 1;
     
-    if (tglMulai && tglAkhir) {
-        currentPageLaporan = 1;
-        renderLaporanWithPagination(tglMulai, tglAkhir, searchTerm);
-    }
+    var totalData = filteredDataUsers.length;
+    var totalPages = Math.ceil(totalData / entriesPerPageUsers);
+    if (currentPageUsers > totalPages) currentPageUsers = totalPages;
+    if (currentPageUsers < 1) currentPageUsers = 1;
+    if (totalPages === 0) currentPageUsers = 1;
+    
+    renderUsersWithPagination();
 });
 
-// ===== PERBAIKAN FUNGSI RENDER LAPORAN =====
-// Pastikan fungsi renderLaporanWithPagination sudah menggunakan parameter namaStaff
-// Fungsi ini sudah ada di laporan.html, hanya perlu dipastikan search memanggilnya dengan benar
+// ===== OVERRIDE FUNGSI RENDER USERS =====
+// Pastikan renderUsersWithPagination menggunakan filteredDataUsers
+// Fungsi ini sudah ada di users.html
 
-      // ===== EXPORT CSV EVENT =====
-      document.getElementById('btnExportLaporanCSV')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (typeof exportLaporanCSV === 'function') {
-          exportLaporanCSV();
-        }
-      });
+      // ===== SETUP EVENTS =====
+      setupUsersEvents();
+      setupEditUserEvents();
+      
+      // ===== RENDER =====
+      renderUsersWithPagination();
     });
   </script>
 </body>

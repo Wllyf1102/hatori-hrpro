@@ -156,7 +156,6 @@ autoUpdater.on('update-downloaded', (info) => {
     console.log('✅ Update downloaded:', info.version);
     mainWindow?.webContents.send('update-downloaded', info);
     
-    // Auto install after 10 seconds
     setTimeout(() => {
         autoUpdater.quitAndInstall();
     }, 10000);
@@ -164,24 +163,20 @@ autoUpdater.on('update-downloaded', (info) => {
 
 // ========== IPC HANDLERS ==========
 
-// Supabase config
 ipcMain.handle('get-supabase-config', () => {
     return supabaseConfig;
 });
 
 ipcMain.handle('set-supabase-config', (event, config) => {
     supabaseConfig = config;
-    // Save config securely (optional)
     return { success: true };
 });
 
-// Environment check
 ipcMain.handle('is-electron', () => true);
 ipcMain.handle('get-app-version', () => app.getVersion());
 ipcMain.handle('get-platform', () => process.platform);
 ipcMain.handle('is-dev', () => isDev);
 
-// File operations
 ipcMain.handle('save-file', async (event, { filename, content }) => {
     try {
         const userDataPath = app.getPath('userData');
@@ -207,12 +202,10 @@ ipcMain.handle('read-file', async (event, filename) => {
     }
 });
 
-// Open external links
 ipcMain.handle('open-external', (event, url) => {
     shell.openExternal(url);
 });
 
-// Dialog
 ipcMain.handle('show-dialog', async (event, options) => {
     return await dialog.showMessageBox(mainWindow, options);
 });

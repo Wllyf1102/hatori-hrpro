@@ -1,7 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-// Expose protected methods that allow the renderer process to use
-// the ipcRenderer without exposing the entire object
+// Expose protected methods
 contextBridge.exposeInMainWorld('electronAPI', {
     // Supabase
     getSupabaseConfig: () => ipcRenderer.invoke('get-supabase-config'),
@@ -20,6 +19,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // External
     openExternal: (url) => ipcRenderer.invoke('open-external', url),
     showDialog: (options) => ipcRenderer.invoke('show-dialog', options),
+    
+    // Window controls (optional)
+    minimizeWindow: () => ipcRenderer.send('window-minimize'),
+    maximizeWindow: () => ipcRenderer.send('window-maximize'),
+    closeWindow: () => ipcRenderer.send('window-close'),
     
     // Update events
     onUpdateStatus: (callback) => ipcRenderer.on('update-status', (event, status) => callback(status)),

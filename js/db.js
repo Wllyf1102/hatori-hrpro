@@ -4,8 +4,8 @@
 
 let supabase = null;
 let supabaseConfig = {
-    url: '',
-    key: ''
+    url: 'https://pdsyjsrngpezncrglfuu.supabase.co',
+    key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkc3lqc3JuZ3Blem5jcmdsZnV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4Mjc3MDAsImV4cCI6MjEwMDQwMzcwMH0.cKKep62FYqFX8vy65IxkhB8nCry5rYnWVAO--dk_FT8'
 };
 let isConnected = false;
 
@@ -43,18 +43,6 @@ async function initDatabase() {
             }
         }
 
-        // If still no config, use default from environment
-        if (!supabaseConfig.url || !supabaseConfig.key) {
-            const defaultConfig = getDefaultConfig();
-            if (defaultConfig.url && defaultConfig.key) {
-                supabaseConfig = defaultConfig;
-                console.log('✅ Using default config from environment');
-            } else {
-                console.warn('⚠️ No Supabase configuration found!');
-                return false;
-            }
-        }
-
         // Initialize Supabase client
         const { createClient } = window.supabase;
         supabase = createClient(supabaseConfig.url, supabaseConfig.key);
@@ -75,13 +63,6 @@ async function initDatabase() {
         isConnected = false;
         return false;
     }
-}
-
-function getDefaultConfig() {
-    return {
-        url: process.env.SUPABASE_URL || '',
-        key: process.env.SUPABASE_KEY || ''
-    };
 }
 
 function getSupabase() {
